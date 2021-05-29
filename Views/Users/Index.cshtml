@@ -1,0 +1,99 @@
+﻿@model IEnumerable<yad2.Models.User>
+
+@{
+    ViewData["Title"] = "טבלת משתמשים";
+}
+
+<style>
+    .title {
+        float: right;
+    }
+
+    .circular {
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+    }
+    #actions{ 
+        width: 20%
+    }
+    .table {
+        direction: rtl
+    }
+
+    td, th, col {
+        text-align: center
+    }
+    .action {
+        font-size: 20px
+    }
+
+</style>
+
+<head>
+    <link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
+</head>
+
+<h1 class="title">טבלת משתמשים</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                שם משתמש
+            </th>
+            <th>
+                סיסמא
+            </th>
+            <th>
+                אי-מייל
+            </th>
+            <th>
+                מספר טלפון
+            </th>
+            <th>
+                האם מנהל
+            </th>
+            <th id="actions" />
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Username)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Password)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Phone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.isAdmin)
+            </td>
+            <td>
+                <div class="container">
+                    <div class="row">
+                        <div class="col col-3 action">
+                            <a asp-action="Edit" asp-route-id="@item.Username"><i class="fas fa-pencil-alt"></i></a>
+                        </div>
+                        <div class="col col-3 action">
+                            <a asp-action="Delete" asp-route-id="@item.Username"><i class="fas fa-user-times"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+<button type="button" class="btn btn-primary float-lg-none circular" onclick="window.location.href='/Users/Create'">
+    <i class="fas fa-plus"></i>
+</button>
