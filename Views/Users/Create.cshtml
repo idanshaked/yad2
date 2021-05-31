@@ -1,50 +1,63 @@
 ﻿@model yad2.Models.User
 
 @{
+    Layout = null;
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<style>
+    .form-group {
+        text-align: start;
+    }
+    form {
+        direction: rtl;
+    }
+</style>
 
-<h4>User</h4>
-<hr />
+<div class="header">
+    <h4 class="modal-title" id="myModalLabel"> הוספת משתמש חדש</h4>
+</div>
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Username" class="control-label"></label>
-                <input asp-for="Username" class="form-control" />
-                <span asp-validation-for="Username" class="text-danger"></span>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label asp-for="Username">שם משתמש</label>
+                    <input asp-for="Username" type="text" class="form-control" id="userNameInput" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="Password">סיסמא</label>
+                    <input asp-for="Password" type="password" class="form-control" id="passwordInput">
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+
+                    <label asp-for="Email"> מייל </label>
+                    <input asp-for="Email" type="email" class="form-control" id="inputAddress" placeholder="XXXX@XXX.XXX">
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="Phone">מספר טלפון</label>
+                    <input asp-for="Phone" type="tel" class="form-control" id="phoneNumber">
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
             </div>
             <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Phone" class="control-label"></label>
-                <input asp-for="Phone" class="form-control" />
-                <span asp-validation-for="Phone" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="isAdmin" /> @Html.DisplayNameFor(model => model.isAdmin)
-                </label>
+                <div class="form-check">
+                        <input class="form-check-input"  asp-for="isAdmin" />
+                        <label class="form-check-label" id="checkboxLabel">
+                            האם מנהל?
+                        </label>
+                </div>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 

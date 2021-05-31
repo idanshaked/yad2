@@ -1,5 +1,4 @@
 ﻿@model IEnumerable<yad2.Models.User>
-
 @{
     ViewData["Title"] = "טבלת משתמשים";
 }
@@ -14,20 +13,51 @@
         width: 50px;
         height: 50px;
     }
-    #actions{ 
+
+    #actions {
         width: 20%
     }
-    .table {
-        direction: rtl
+
+    #createContent {
+        padding: 12px;
     }
 
-    td, th, col {
+    .table, .modal-title {
+        direction: rtl;
+    }
+
+    .row {
+        width: 100%
+    }
+
+    .closeBtn {
+        margin: -1rem 0 0 0 !important;
+    }
+
+    .content {
+        direction: rtl;
+        text-align: initial;
+        padding-bottom: 20px
+    }
+
+    #createCloseBtn {
+        position: fixed;
+        margin-top: 12px !important;
+        margin-left: 15px !important;
+    }
+
+    td, th, col, .modal-title {
         text-align: center
     }
-    .action {
-        font-size: 20px
+
+    #checkboxLabel {
+        padding-right: 20px
     }
 
+    .action {
+        color: #0366d6 !important;
+        font-size: 20px
+    }
 </style>
 
 <head>
@@ -61,39 +91,95 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Username)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Password)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Phone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.isAdmin)
-            </td>
-            <td>
-                <div class="container">
-                    <div class="row">
-                        <div class="col col-3 action">
-                            <a asp-action="Edit" asp-route-id="@item.Username"><i class="fas fa-pencil-alt"></i></a>
-                        </div>
-                        <div class="col col-3 action">
-                            <a asp-action="Delete" asp-route-id="@item.Username"><i class="fas fa-user-times"></i></a>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Username)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Password)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.isAdmin)
+                </td>
+                <td>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col col-3 action">
+                                <a asp-action="Edit" asp-route-id="@item.Username"><i class="fas fa-pencil-alt"></i></a>
+                            </div>
+                            <div class="col col-3 action">
+                                <a class="fas fa-user-times deleteBtn" data-toggle="modal" data-user="@item.Username">
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </td>
-        </tr>
+                </td>
+            </tr>
+
         }
     </tbody>
 </table>
 
-<button type="button" class="btn btn-primary float-lg-none circular" onclick="window.location.href='/Users/Create'">
+<button type="button" id="createBtn" class="btn btn-primary float-lg-none circular" data-toggle="modal">
     <i class="fas fa-plus"></i>
 </button>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="deleteModal" data-url='@Url.Action("Delete")'>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close closeBtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">שים לב!</h4>
+            </div>
+            <div id="deleteContent"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-url='@Url.Action("Create")'>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <button type="button" class="close" id="createCloseBtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <div id="createContent"></div>
+        </div>
+
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#createBtn').click(function () {
+            var url = $('#createModal').data('url');
+
+            $.get(url, function (data) {
+                $('#createContent').html(data);
+
+                $('#createModal').modal('show');
+            });
+        });
+
+        $(".deleteBtn").click(function (event) {
+            var url = $('#deleteModal').data('url');
+            $.ajax({
+                url: url,
+                type: 'get',
+                data: {
+                    id: event.target.dataset.user
+                },
+                success: function (data) {
+                    $('#deleteContent').html(data);
+
+                    $('#deleteModal').modal('show');
+                }
+            });
+        })
+    });
+
+</script>
