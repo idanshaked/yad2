@@ -3,69 +3,12 @@
     ViewData["Title"] = "טבלת משתמשים";
 }
 
-<style>
-    .title {
-        float: right;
-    }
-
-    .circular {
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-    }
-
-    #actions {
-        width: 20%
-    }
-
-    #createContent {
-        padding: 12px;
-    }
-
-    .table, .modal-title {
-        direction: rtl;
-    }
-
-    .row {
-        width: 100%
-    }
-
-    .closeBtn {
-        margin: -1rem 0 0 0 !important;
-    }
-
-    .content {
-        direction: rtl;
-        text-align: initial;
-        padding-bottom: 20px
-    }
-
-    #createCloseBtn {
-        position: fixed;
-        margin-top: 12px !important;
-        margin-left: 15px !important;
-    }
-
-    td, th, col, .modal-title {
-        text-align: center
-    }
-
-    #checkboxLabel {
-        padding-right: 20px
-    }
-
-    .action {
-        color: #0366d6 !important;
-        font-size: 20px
-    }
-</style>
-
 <head>
     <link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/usersTable.css" />
 </head>
 
 <h1 class="title">טבלת משתמשים</h1>
-
 
 <table class="table">
     <thead>
@@ -91,37 +34,52 @@
     <tbody>
         @foreach (var item in Model)
         {
+            <form>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Username)
+                <td class="username">
+                    <span data-val="@item.Username">
+                        @Html.DisplayFor(modelItem => item.Username)
+                    </span>
+                    <input value="@item.Username" class="form-control" style="display:none" required />
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Password)
+                <td class="password form-group">
+                    <span data-val="@item.Password">
+                        @Html.DisplayFor(modelItem => item.Password)
+                    </span>
+                    <input value="@item.Password" class="form-control " style="display:none" required />
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Email)
+                <td class="mail">
+                    <span data-val="@item.Email">
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </span>
+                    <input value="@item.Email" class="form-control" style="display:none" required />
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Phone)
+                <td class="phone">
+                    <span data-val="@item.Phone">
+                        @Html.DisplayFor(modelItem => item.Phone)
+                    </span>
+                    <input value="@item.Phone" class="form-control" style="display:none" required />
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.isAdmin)
+                <td class="isAdmin">
+                    <span>
+
+                        <input type="checkbox" disabled id="realValue" checked="@item.isAdmin" />
+                    </span>
+                    <input type="checkbox" id="editable" checked="@item.isAdmin" style="display:none" />
                 </td>
                 <td>
                     <div class="container">
-                        <div class="row">
-                            <div class="col col-3 action">
-                                <a asp-action="Edit" asp-route-id="@item.Username"><i class="fas fa-pencil-alt"></i></a>
-                            </div>
-                            <div class="col col-3 action">
-                                <a class="fas fa-user-times deleteBtn" data-toggle="modal" data-user="@item.Username">
-                                </a>
-                            </div>
-                        </div>
+                        <a class="Edit"><i class="fas fa-pencil-alt"></i></a>
+                        <a class="fas fa-user-times deleteBtn" data-toggle="modal" data-user="@item.Username">
+                        </a>
+                        <a class="cancel fas fa-undo" style="display:none" data-user="@item.Username">
+                        </a>
+                        <button type="submit" class="Update fas fa-save" style="display:none" data-user="@item.Username">
+                        </button>
                     </div>
                 </td>
             </tr>
-
+            </form>
         }
     </tbody>
 </table>
@@ -146,12 +104,14 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <button type="button" class="close" id="createCloseBtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <div id="createContent"></div>
+            <div id="createContent">
+            </div>
         </div>
 
     </div>
 </div>
 
+<script src="~/js/users.js"></script>
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script>
     $(document).ready(function () {
@@ -180,6 +140,101 @@
                 }
             });
         })
+
+        $(".table .Edit").on("click", function () {
+            var row = $(this).closest("tr");
+            $("td", row).each(function () {
+                if ($(this).find("input").length > 0) {
+                    if (!$(this).hasClass("username")) {
+                        $(this).find("input").show();
+                        $(this).find("span").hide();
+                    }
+                }
+            });
+            row.find(".Update").show();
+            row.find(".cancel").show();
+            row.find(".deleteBtn").hide();
+            $(this).hide();
+        });
+
+        $(".table .Update").on("click", function () {
+
+            var row = $(this).closest("tr");
+            var modifiedUser = {};
+            modifiedUser.Username = row.find(".username").find("input").val();
+            modifiedUser.Password = row.find(".password").find("input").val();
+            modifiedUser.Email = row.find(".mail").find("input").val();
+            modifiedUser.Phone = row.find(".phone").find("input").val();
+            modifiedUser.id = modifiedUser.Username;
+            const validationMessages = validateUser(modifiedUser);
+            if (validationMessages.length == 0) {
+                $("td", row).each(function () {
+                    if ($(this).find("input").length > 0) {
+                        var span = $(this).find("span");
+                        var input = $(this).find("input");
+                        if ($(this).hasClass('isAdmin')) {
+                            input = $(this).find('#editable')
+                            span.find('#realValue').attr('checked', (input[0].checked))
+                        } else if (!$(this).hasClass('mail')) {
+                            span.html(input.val());
+                        } else {
+                            const mail = input.val();
+                            const mailHref = "mailto:" + mail;
+                            span.html("<a href="+mailHref + ">"+ mail +"</a>")
+                        }
+                        span.show();
+                        input.hide();
+                    }
+                });
+                row.find(".Edit").show();
+                row.find(".deleteBtn").show();
+                row.find(".cancel").hide();
+                $(this).hide();
+
+                modifiedUser.isAdmin = row.find(".isAdmin").find("span").find("#realValue")[0].checked
+                var token = '@Html.AntiForgeryToken()';
+                token = $(token).val();
+                modifiedUser.__requestverificationtoken = token;
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Users/Edit/5",
+                    dataType: "JSON",
+                    data: modifiedUser
+                });
+            } else {
+                validationMessages.forEach(field => {
+                    let inputField = row.find(`.` + field + ' input');
+                    inputField.addClass('has-error')
+                })
+            }
+        });
+
+        $(".table .cancel").on("click", function () {
+            var row = $(this).closest("tr");
+            $("td", row).each(function () {
+                if ($(this).find("input").length > 0) {
+                    var span = $(this).find("span");
+                    var input = $(this).find("input");
+                    if ($(this).hasClass('isAdmin')) {
+                        input = $(this).find('#editable')
+                        if (!span.find("#realValue")[0].checked) {
+                            $(this).find("#editable").prop('checked', false)
+                        } else {
+                            $(this).find("#editable").prop('checked', true)
+                        }
+                    } else {
+                        input.val(span.data('val'));
+                    }
+                    input.hide();
+                    span.show();
+                }
+            });
+            row.find(".Edit").show();
+            row.find(".deleteBtn").show();
+            row.find(".Update").hide();
+            $(this).hide();
+        });
     });
 
 </script>
