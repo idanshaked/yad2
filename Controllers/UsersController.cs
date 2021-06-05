@@ -124,7 +124,7 @@ namespace yad2.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             } else {
-                return ValidationProblem();
+                return View();
             }
         }
 

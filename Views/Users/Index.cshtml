@@ -34,8 +34,8 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <form>
-            <tr>
+             <tr>
+            <form id="editForm">
                 <td class="username">
                     <span data-val="@item.Username">
                         @Html.DisplayFor(modelItem => item.Username)
@@ -78,8 +78,8 @@
                         </button>
                     </div>
                 </td>
-            </tr>
             </form>
+            </tr>
         }
     </tbody>
 </table>
@@ -157,8 +157,8 @@
             $(this).hide();
         });
 
-        $(".table .Update").on("click", function () {
-            debugger
+        $(".table #editForm").on("submit", function (event) {
+            event.preventDefault();
             var row = $(this).closest("tr");
             var modifiedUser = {};
             modifiedUser.Username = row.find(".username").find("input").val();
@@ -192,6 +192,7 @@
                 });
                 row.find(".Edit").show();
                 row.find(".deleteBtn").show();
+                row.find(".Update").hide();
                 row.find(".cancel").hide();
                 $(this).hide();
 
@@ -205,13 +206,14 @@
                     url: "/Users/Edit/5",
                     dataType: "JSON",
                     data: modifiedUser
-                });
+                })
             } else {
                 validationMessages.forEach(field => {
                     let inputField = row.find(`.` + field + ' input');
                     inputField.addClass('has-error')
                 })
             }
+            return false;
         });
 
         $(".table .cancel").on("click", function () {
