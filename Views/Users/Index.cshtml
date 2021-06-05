@@ -158,7 +158,7 @@
         });
 
         $(".table .Update").on("click", function () {
-
+            debugger
             var row = $(this).closest("tr");
             var modifiedUser = {};
             modifiedUser.Username = row.find(".username").find("input").val();
@@ -174,7 +174,11 @@
                         var input = $(this).find("input");
                         if ($(this).hasClass('isAdmin')) {
                             input = $(this).find('#editable')
-                            span.find('#realValue').attr('checked', (input[0].checked))
+                            if (!input[0].checked) {
+                                $(this).find("#realValue").prop('checked', false)
+                            } else {
+                                $(this).find("#realValue").prop('checked', true)
+                            }
                         } else if (!$(this).hasClass('mail')) {
                             span.html(input.val());
                         } else {
