@@ -20,6 +20,12 @@ namespace yad2.Controllers
             _context = context;
         }
 
+        // GET: Users/Login
+        public IActionResult Login()
+        {
+            return View();
+        }
+
         // GET: Users
         public async Task<IActionResult> Index()
         {

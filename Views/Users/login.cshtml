@@ -1,0 +1,66 @@
+﻿@model yad2.Models.User
+
+@{
+    ViewData["Title"] = "Login";
+}
+<style>
+    .login-form {
+        width: 30%;
+        margin: 7% auto;
+        font-size: 15px;
+    }
+
+        .login-form form {
+            background: #f7f7f7;
+            box-shadow: 0px 2px 2px rgb(0 0 0 / 30%);
+            padding: 10%;
+        }
+
+        .login-form h2 {
+            margin: 0px 0 10%;
+        }
+
+    .form-control, .btn {
+        min-height: 38px;
+        border-radius: 2px;
+    }
+
+    .btn {
+        font-size: 15px;
+        font-weight: bold;
+    }
+    .new-account{
+        margin-top: 7%;
+    }
+</style>
+
+    <div class="login-form">
+        <div>
+            <form asp-action="Login">
+                <h2 class="text-center">דף התחברות</h2>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <input asp-for="Username" class="form-control" placeholder="שם משתמש" required="required" />
+                </div>
+                <div class="form-group">
+                    <input asp-for="Password" class="form-control" placeholder="סיסמא" required="required" />
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block">התחבר</button>
+                    <p class="text-center new-account"><a href="#">אין לך חשבון ? </a></p>
+
+                </div>
+               
+            </form>
+            @if (ViewBag.Error != null)
+            {
+                <div class="text-danger">@ViewBag.Error</div>
+            }
+        </div>
+    </div>
+
+   
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
