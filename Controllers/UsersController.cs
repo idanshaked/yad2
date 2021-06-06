@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using yad2.Data;
+using System.Net;
 // using yad2.Models;
 
 namespace yad2.Controllers
@@ -56,13 +57,23 @@ namespace yad2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Username,Password,Email,Phone,isAdmin")] yad2.Models.User user)
         {
+            var originalUser = await _context.User
+                .FirstOrDefaultAsync(m => m.Username == user.Username);
+
+            if (originalUser != null)
+            {
+                return Json("already exist");
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+            var errorList = ModelState.Values.SelectMany(m => m.Errors)
+                                 .Select(e => e.ErrorMessage)
+                                 .ToList();
+            return Json(errorList);
         }
 
         // GET: Users/Edit/5
@@ -112,8 +123,9 @@ namespace yad2.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
+            } else {
+                return View();
             }
-            return View(user);
         }
 
         // GET: Users/Delete/5
