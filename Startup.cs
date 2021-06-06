@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using yad2.Data;
 
 namespace yad2
 {
@@ -24,6 +26,12 @@ namespace yad2
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            services.AddDbContext<yad2Context>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("yad2Context")));
+
+            /*services.AddDbContext<yad2Context>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("yad2Context")));*/
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
