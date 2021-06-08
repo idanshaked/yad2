@@ -15,7 +15,7 @@ namespace yad2.Models
         // For more information refer to the documentation:
         // http://msdn.microsoft.com/en-us/data/jj591621.aspx
     
-        public yad2Context() : base("name=yad2Context")
+        public yad2Context() : base("yad2Context")
         {
         }
 
