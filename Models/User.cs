@@ -20,7 +20,7 @@ namespace yad2.Models
         public String Email { get; set; }
 
         [Required(ErrorMessage = "please enter phone number")]
-        public int Phone { get; set; }
+        public String Phone { get; set; }
         public bool isAdmin { get; set; }
     }
 }

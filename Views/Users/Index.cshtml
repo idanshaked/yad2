@@ -58,7 +58,7 @@
                     <span data-val="@item.Phone">
                         @Html.DisplayFor(modelItem => item.Phone)
                     </span>
-                    <input value="@item.Phone" class="form-control" style="display:none" required />
+                    <input value="@item.Phone" class="form-control" style="display:none" required pattern="/^05\d{8}/"/>
                 </td>
                 <td class="isAdmin">
                     <span>
