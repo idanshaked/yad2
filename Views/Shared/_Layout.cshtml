@@ -6,6 +6,18 @@
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Heebo">
+    <link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
+
+    <style>
+        .main-margin {
+            margin: 0px 5% 0px 5%;
+        }
+
+        body {
+            font-family: Heebo;
+        }
+    </style>
 </head>
 <body>
     <header dir="rtl">
@@ -29,11 +41,13 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    
+    <div class="main-margin">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
+    
 
     <footer class="border-top footer text-muted">
         <div class="container">

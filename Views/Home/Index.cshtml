@@ -6,80 +6,87 @@
 <html>
 <head>
     <style>
-        h2 {
-            color: #333;
-            font-weight: 700;
-            position: center;
-            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-            text-shadow: 2px 2px #888;
+        .header {
+            background-image: url("https://assets.yad2.co.il/yad2site/y2assets/images/pages/home/background.png");
+            height: 340px;
+            padding-right: 20px;
+            color: #717171;
+            margin-bottom: 3%;
         }
 
-        h3 {
-            color: #333;
-            font-weight: 400;
-            position: center;
-            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        .header > img {
+            width: 250px;
         }
 
-        h4 {
-            color: #333;
-            font-weight: 500;
-            font-style: italic;
-            font-size: large;
+        body {
+            text-align: right;
         }
 
-        .cars {
-            position: center;
-            float: initial
+        .header-button {
+            margin-top: 28px;
         }
 
-        hr {
-            border-color: #333;
+        .recommended-tags {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: space-around;
+            margin: 5% 0px 5% 0px;
+        }
+
+        .tag-item {
+            display: flex;
+            flex-direction: column;
+            border: solid 1.5px;
+            border-radius: 70px;
+            padding: 20px 30px;
+            text-align: center;
+            border-color: #cacaca;
+        }
+
+        .tag-icon {
+            font-size: 210%;
         }
     </style>
 </head>
 
 <body>
-
-
-
-    <h2 align="center">
-        Shop.Trade.Online</h2">
-        <h3 align="left">Best Sellers</h3>
-
-        <div class="cars">
-            <a href="/Notices?SearchString=cars">
-                <img style="float: inherit; margin: 0px 0px 15px 15px;" src="https://i.imgur.com/hIbuwhn.jpg" alt="car" width="200" height="200" id="cars">
-            </a>
-            <a href="/Notices?SearchString=jewllery">
-                <img style="float: inherit; margin: 0px 0px 15px 15px;" src="https://i.imgur.com/L17UyvV.jpg" alt="jewllery" width="200" height="200" id="jewllery">
-            </a>
-            <a href="/Notices?SearchString=sports">
-                <img style="float: inherit; margin: 0px 0px 15px 15px;" src="https://i.imgur.com/K4WCw0m.jpg" alt="sports" width="200" height="200" id="sports">
-            </a>
-            <a href="/Notices?SearchString=furniture">
-                <img style="float: inherit; margin: 0px 0px 15px 15px;" src="https://i.imgur.com/WpNtAiU.jpg" alt="furniture" width="200" height="200" id="furniture">
-            </a>
-            <a href="/Notices?SearchString=electronics">
-                <img style="float: inherit; margin: 0px 0px 15px 15px;" src="https://i.imgur.com/euxfpUW.jpg" alt="electronics" width="200" height="200">
-            </a>
-
+    <div class="header">
+        <img src="https://assets.yad2.co.il/yad2site/y2assets/images/header/yad2Logo.png" />
+        <h3>קניות בפשטות, קלילות ומהירות</h3>
+        <a type="button" class="btn btn-primary header-button" asp-area="" asp-controller="Products" asp-action="Index">קניית מוצרים</a>
+    </div>
+    <h3>תגיות מובילות</h3>
+    <hr>
+    <div class="recommended-tags">
+        <div class="tag-item">
+            <i class="fas fa-car tag-icon"></i>
+            רכב
         </div>
-
-        </hr>
-
-        <br>
-        <h3>And Much More!</h3>
-        <hr>
-        <iframe width="1140" height="500" src="https://www.youtube.com/embed/EU-eQpCqBXQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        <hr />
-        <h4>Log in to shop now</h4>
-        <br>
-
-        @*<script type="text/javascript">
-                document.getElementById("furniture").onclick = function () {
-                    location.href = "/Notices?SearchString=furniture";
-                };
-            </script>*@
+        <div class="tag-item">
+            <i class="far fa-building tag-icon"></i>
+            נדל"ן
+        </div>
+        <div class="tag-item">
+            <i class="fas fa-laptop tag-icon"></i>
+            מחשב
+        </div>
+        <div class="tag-item">
+            <i class="fas fa-car tag-icon"></i>
+            רכב
+        </div>
+        <div class="tag-item">
+            <i class="fas fa-car tag-icon"></i>
+            רכב
+        </div>
+    </div>
+    <h3>?מי אנחנו</h3>
+    <hr>
+    <iframe width="1140" height="500" src="https://www.youtube.com/embed/PZ9_OC7LQBk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <hr />
+    @*<script type="text/javascript">
+            document.getElementById("furniture").onclick = function () {
+                location.href = "/Notices?SearchString=furniture";
+            };
+        </script>*@
 </body>
 </html>
