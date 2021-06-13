@@ -41,7 +41,7 @@
 
 <div class="login-form">
     <div>
-        <form asp-action="Login">
+        <form asp-action="Login" asp-route-returnurl='@Context.Request.Query["ReturnUrl"]'>
             <h2 class="text-center">דף התחברות</h2>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
