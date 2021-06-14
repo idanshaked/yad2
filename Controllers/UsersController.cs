@@ -77,9 +77,9 @@ namespace yad2.Controllers
         }
 
         // GET: Users/Create
-        public IActionResult Create(bool login)
+        public IActionResult Create(bool isFromLoginPage)
         {
-            ViewBag.login = login;
+            ViewBag.isFromLoginPage = isFromLoginPage;
             return View();
         }
 
@@ -88,7 +88,7 @@ namespace yad2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Username,Password,Email,Phone,isAdmin")] yad2.Models.User user)
+        public async Task<IActionResult> Create([Bind("Username,Password,Email,Phone,isAdmin")] yad2.Models.User user, bool isFromLoginPage, string returnUrl = null)
         {
             var originalUser = await _context.User
                 .FirstOrDefaultAsync(m => m.Username == user.Username);
@@ -101,8 +101,25 @@ namespace yad2.Controllers
             {
                 _context.Add(user);
                 await _context.SaveChangesAsync();
-                await _SignInAsync(user);
-                return RedirectToAction(nameof(Index));
+                
+                if (isFromLoginPage)
+                {
+                    await _SignInAsync(user);
+
+                    if (Url.IsLocalUrl(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
+                    else
+                    {
+                        return RedirectToAction(nameof(HomeController.Index), "Home");
+                    }
+                }
+                else
+                {
+                    return RedirectToAction(nameof(Index));
+
+                }
             }
             var errorList = ModelState.Values.SelectMany(m => m.Errors)
                                  .Select(e => e.ErrorMessage)

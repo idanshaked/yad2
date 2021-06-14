@@ -20,7 +20,7 @@
 </div>
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="Create">
+        <form asp-action="Create" asp-route-returnurl='@Context.Request.Query["ReturnUrl"]' asp-route-isFromLoginPage=@ViewBag.isFromLoginPage>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-row">
                 <div class="form-group col-md-6">
@@ -47,7 +47,7 @@
                     <span asp-validation-for="Phone" class="text-danger"></span>
                 </div>
             </div>
-            @if (!ViewBag.login)
+            @if (!ViewBag.isFromLoginPage)
             {
                 <div class="form-group">
                     <div class="form-check">

@@ -68,7 +68,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-url='@Url.Action("Create", "Users", new { login = true })'>
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-url='@Url.Action("Create", "Users", new { isFromLoginPage = true, returnUrl = Context.Request.Query["ReturnUrl"] })'>
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <button type="button" class="close" id="createCloseBtn" data-dismiss="modal" aria-label="Close">
