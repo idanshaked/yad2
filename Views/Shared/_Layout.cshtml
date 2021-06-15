@@ -32,13 +32,17 @@
                     <li class="nav-item navbar-toggle">
                         <a class="nav-link" asp-controller="Home" asp-action="Privacy">מוצרים <span class="sr-only">(current)</span></a>
                     </li>
+                    @if (Context.User != null & Context.User.Claims != null & Context.User.Claims.Count() > 0 && User.FindFirst("isAdmin").Value == "True")
+                    {
+                        <li class="nav-item navbar-toggle">
+                        <a class="nav-link" asp-controller="Home" asp-action="Privacy">גרפים<span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item navbar-toggle">
+                            <a class="nav-link" asp-controller="Users" asp-action="Index">ניהול משתמשים<span class="sr-only">(current)</span></a>
+                        </li>
+                    }
 
-                    <li class="nav-item navbar-toggle">
-                        <a class="nav-link" asp-controller="Home" asp-action="Privacy">גרפים <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item navbar-toggle">
-                        <a class="nav-link" asp-controller="Users" asp-action="Index">ניהול משתמשים <span class="sr-only">(current)</span></a>
-                    </li>
+
                     @if (Context.User != null & Context.User.Claims != null & Context.User.Claims.Count() > 0)
                     {
                         <li>

@@ -256,6 +256,7 @@ namespace yad2.Controllers
                 {
                     new Claim(ClaimTypes.Name, user.Username),
                     new Claim(ClaimTypes.Role, user.isAdmin.ToString()),
+                     new Claim("isAdmin", user.isAdmin.ToString()),
                 };
             var claimIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var authProperties = new AuthenticationProperties
