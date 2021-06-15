@@ -18,6 +18,13 @@ namespace yad2.Controllers
             _logger = logger;
         }
 
+        public ActionResult About()
+        {
+            ViewBag.Message = "Your application description page.";
+
+            return View();
+        }
+
         public IActionResult Index()
         {
             return View();
