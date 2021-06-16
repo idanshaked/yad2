@@ -9,8 +9,8 @@ using yad2.Data;
 namespace yad2.Migrations
 {
     [DbContext(typeof(yad2Context))]
-    [Migration("20210529162530_firstMigration")]
-    partial class firstMigration
+    [Migration("20210616183736_test")]
+    partial class test
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,6 +26,7 @@ namespace yad2.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
