@@ -8,112 +8,158 @@
     <link rel="stylesheet" href="~/css/usersTable.css" />
 </head>
 
-<h1 class="title">טבלת משתמשים</h1>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                שם משתמש
-            </th>
-            <th>
-                סיסמא
-            </th>
-            <th>
-                אי-מייל
-            </th>
-            <th>
-                מספר טלפון
-            </th>
-            <th>
-                האם מנהל
-            </th>
-            <th id="actions" />
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-             <tr>
-            <form id="editForm">
-                <td class="username">
-                    <span data-val="@item.Username">
-                        @Html.DisplayFor(modelItem => item.Username)
-                    </span>
-                    <input value="@item.Username" class="form-control" style="display:none" required />
-                </td>
-                <td class="password form-group">
-                    <span data-val="@item.Password">
-                        @Html.DisplayFor(modelItem => item.Password)
-                    </span>
-                    <input value="@item.Password" class="form-control " style="display:none" required />
-                </td>
-                <td class="mail">
-                    <span data-val="@item.Email">
-                        @Html.DisplayFor(modelItem => item.Email)
-                    </span>
-                    <input value="@item.Email" class="form-control" style="display:none" required />
-                </td>
-                <td class="phone">
-                    <span data-val="@item.Phone">
-                        @Html.DisplayFor(modelItem => item.Phone)
-                    </span>
-                    <input value="@item.Phone" class="form-control" style="display:none" required pattern="/^05\d{8}/"/>
-                </td>
-                <td class="isAdmin">
-                    <span>
-
-                        <input type="checkbox" disabled id="realValue" checked="@item.isAdmin" />
-                    </span>
-                    <input type="checkbox" id="editable" checked="@item.isAdmin" style="display:none" />
-                </td>
-                <td>
-                    <div class="container">
-                        <a class="Edit"><i class="fas fa-pencil-alt"></i></a>
-                        <a class="fas fa-user-times deleteBtn" data-toggle="modal" data-user="@item.Username">
-                        </a>
-                        <a class="cancel fas fa-undo" style="display:none" data-user="@item.Username">
-                        </a>
-                        <button type="submit" class="Update fas fa-save" style="display:none" data-user="@item.Username">
-                        </button>
+<div style="height: 60px">
+    <h1 class="title">טבלת משתמשים</h1>
+</div>
+<div style="width:100%">
+    <div style="height: 36px;">
+        <h5 style="float: right; margin-left: 15px;">חיפוש בסיסי </h5>
+        <input type="text" style="float: right;" />
+    </div>
+ 
+    <div class="accordion" style="height:auto" id="category-accordion">
+        <div class="card">
+            <div class="card-header" data-toggle="collapse" data-target="#category-1">
+                <h5 class="mb-0" style="text-align:right">
+                    חיפוש מתקדם
+                </h5>
+            </div>
+            <div id="category-1" class="collapse" data-parent="#category-accordion">
+                <div>
+                    <div class="container" style="margin-bottom: 10px;">
+                        <div class="row">
+                            <span class="col-2" style="text-align: initial">
+                                <label> שם משתמש </label>
+                                <input type="text" style="width: 100%" />
+                            </span>
+                            <span class="col-2" style="text-align: initial">
+                                <label> מייל </label>
+                                <input type="text" style="width: 100%" />
+                            </span>
+                            <span class="col-2" style="text-align: initial">
+                                <label> מספר טלפון </label>
+                                <input type="text" style="width: 100%" />
+                            </span>
+                            <span class="col-2" style="text-align: initial">
+                                <label> האם מנהל? </label>
+                                <br />
+                                <input type="checkbox" />
+                            </span>
+                        </div>
                     </div>
-                </td>
-            </form>
-            </tr>
-        }
-    </tbody>
-</table>
-
-<button type="button" id="createBtn" class="btn btn-primary float-lg-none circular" data-toggle="modal">
-    <i class="fas fa-plus"></i>
-</button>
-
-<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="deleteModal" data-url='@Url.Action("Delete")'>
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close closeBtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">שים לב!</h4>
+                </div>
             </div>
-            <div id="deleteContent"></div>
         </div>
+    </div>
+    <div>
+        <button> חפש </button>
     </div>
 </div>
 
-<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-url='@Url.Action("Create")'>
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <button type="button" class="close" id="createCloseBtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <div id="createContent">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        שם משתמש
+                    </th>
+                    <th>
+                        סיסמא
+                    </th>
+                    <th>
+                        אי-מייל
+                    </th>
+                    <th>
+                        מספר טלפון
+                    </th>
+                    <th>
+                        האם מנהל
+                    </th>
+                    <th id="actions" />
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <form id="editForm">
+                        <td class="username">
+                            <span data-val="@item.Username">
+                                @Html.DisplayFor(modelItem => item.Username)
+                            </span>
+                            <input value="@item.Username" class="form-control" style="display:none" required />
+                        </td>
+                        <td class="password form-group">
+                            <span data-val="@item.Password">
+                                @Html.DisplayFor(modelItem => item.Password)
+                            </span>
+                            <input value="@item.Password" class="form-control " style="display:none" required />
+                        </td>
+                        <td class="mail">
+                            <span data-val="@item.Email">
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </span>
+                            <input value="@item.Email" class="form-control" style="display:none" required />
+                        </td>
+                        <td class="phone">
+                            <span data-val="@item.Phone">
+                                @Html.DisplayFor(modelItem => item.Phone)
+                            </span>
+                            <input value="@item.Phone" class="form-control" style="display:none" required pattern="/^05\d{8}/" />
+                        </td>
+                        <td class="isAdmin">
+                            <span>
+
+                                <input type="checkbox" disabled id="realValue" checked="@item.isAdmin" />
+                            </span>
+                            <input type="checkbox" id="editable" checked="@item.isAdmin" style="display:none" />
+                        </td>
+                        <td>
+                            <div class="container">
+                                <a class="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                <a class="fas fa-user-times deleteBtn" data-toggle="modal" data-user="@item.Username">
+                                </a>
+                                <a class="cancel fas fa-undo" style="display:none" data-user="@item.Username">
+                                </a>
+                                <button type="submit" class="Update fas fa-save" style="display:none" data-user="@item.Username">
+                                </button>
+                            </div>
+                        </td>
+                        </form>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <button type="button" id="createBtn" class="btn btn-primary float-lg-none circular" data-toggle="modal">
+            <i class="fas fa-plus"></i>
+        </button>
+
+        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="deleteModal" data-url='@Url.Action("Delete")'>
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close closeBtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">שים לב!</h4>
+                    </div>
+                    <div id="deleteContent"></div>
+                </div>
             </div>
         </div>
 
-    </div>
-</div>
+        <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-url='@Url.Action("Create")'>
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <button type="button" class="close" id="createCloseBtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <div id="createContent">
+                    </div>
+                </div>
 
-<script src="~/js/users.js"></script>
-<script src="~/lib/jquery/dist/jquery.js"></script>
-<script>
+            </div>
+        </div>
+
+        <script src="~/js/users.js"></script>
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script>
     $(document).ready(function () {
         $('#createBtn').click(function () {
             var url = $('#createModal').data('url');
@@ -242,5 +288,4 @@
             $(this).hide();
         });
     });
-
 </script>
