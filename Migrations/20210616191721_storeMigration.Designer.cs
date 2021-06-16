@@ -9,8 +9,8 @@ using yad2.Data;
 namespace yad2.Migrations
 {
     [DbContext(typeof(yad2Context))]
-    [Migration("20210616183736_test")]
-    partial class test
+    [Migration("20210616191721_storeMigration")]
+    partial class storeMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -19,6 +19,28 @@ namespace yad2.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.6")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("yad2.Models.Store", b =>
+                {
+                    b.Property<int>("storeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<double>("lat")
+                        .HasColumnType("float");
+
+                    b.Property<double>("lng")
+                        .HasColumnType("float");
+
+                    b.Property<string>("storeName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("storeId");
+
+                    b.ToTable("Store");
+                });
 
             modelBuilder.Entity("yad2.Models.User", b =>
                 {

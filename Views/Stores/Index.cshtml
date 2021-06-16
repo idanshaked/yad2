@@ -1,0 +1,123 @@
+﻿@model IEnumerable<yad2.Models.Store>
+
+@{
+    ViewData["Title"] = "סניפים";
+}
+
+@*<p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.storeName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.lat)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.lng)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.storeName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.lat)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.lng)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.storeId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.storeId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.storeId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+*@
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    function loadMap() {
+        const map = new Microsoft.Maps.Map(document.getElementById('map'), {
+            credentials: 'ApuCycJr1Nj2E8XCyNgrPLfogKZjB7vguFf3VTXFjqgR9pcvU_8GWQLs5OReJuE6',
+        });
+        map.setView({
+            mapTypeId: Microsoft.Maps.MapTypeId.road,
+            center: new Microsoft.Maps.Location(32.100000, 34.788052),
+            zoom: 10
+        });
+
+        $.ajax({
+            type: 'GET',
+            url: '/stores/All',
+            async: true,
+            success: function (stores) {
+                stores.forEach(store => addLocationToMap(map, store));
+            },
+            error: function (response) {
+                alert("Error on getting all locations");
+                console.log(response);
+            }
+        });
+    }
+
+    const addLocationToMap = (map, store) => {
+        const pushPin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(store.lat, store.lng), { color: 'blue' });
+        pushPin.setOptions({ enableHoverStyle: true });
+        pushPin.metadata = {
+            id: store.storeId,
+            title: store.storeName
+        };
+
+        map.entities.push(pushPin);
+@*
+        const infoboxTemplate = '<div class="customInfobox"><div class="infoboxTitle">{title}</div></div>';
+*@
+        const infobox = new Microsoft.Maps.Infobox(pushPin.getLocation(), {
+            visible: false
+        });
+
+        infobox.setMap(map);
+
+@*        const showInfobox = e => {
+            if (e.target.metadata) {
+                infobox.setOptions({
+                    location: e.target.getLocation(),
+                    htmlContent: infoboxTemplate.replace('{title}', e.target.metadata.title).replace('{description}', e.target.metadata.description),
+                    visible: true
+                });
+            }
+        }
+        const hideInfobox = e => {
+            infobox.setOptions({ visible: false });
+        }
+
+
+        Microsoft.Maps.Events.addHandler(pushPin, 'mouseover', showInfobox);
+        Microsoft.Maps.Events.addHandler(pushPin, 'mouseout', hideInfobox);*@
+    };
+
+</script>
+<script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?branch=release&callback=loadMap' async defer></script>
+
+
+<div class="mapPageWrapper">
+    <div style="padding: 2rem;"></div>
+
+    <h4>הסניפים שלנו ברחבי הארץ</h4>
+
+    <div style="padding: 2rem;"></div>
+
+    <div id="map" style="position:relative;width:800px;height:350px;"></div>
+</div>
+

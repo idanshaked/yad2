@@ -2,10 +2,25 @@
 
 namespace yad2.Migrations
 {
-    public partial class test : Migration
+    public partial class storeMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Store",
+                columns: table => new
+                {
+                    storeId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    storeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    lat = table.Column<double>(type: "float", nullable: false),
+                    lng = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Store", x => x.storeId);
+                });
+
             migrationBuilder.CreateTable(
                 name: "User",
                 columns: table => new
@@ -24,6 +39,9 @@ namespace yad2.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Store");
+
             migrationBuilder.DropTable(
                 name: "User");
         }
