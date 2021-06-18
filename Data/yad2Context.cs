@@ -9,7 +9,7 @@ namespace yad2.Data
 {
     public class yad2Context : DbContext
     {
-        public yad2Context (DbContextOptions<yad2Context> options)
+        public yad2Context(DbContextOptions<yad2Context> options)
             : base(options)
         {
         }
