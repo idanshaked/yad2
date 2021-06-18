@@ -165,7 +165,7 @@ namespace yad2.Controllers
             return _context.User.Any(e => e.Username == id);
         }
 
-        public async Task<IActionResult> Search(string username, string phoneNumber, string mail, bool admin, string general)
+        public async Task<IActionResult> Search(string username, string phoneNumber, string mail, bool? admin, string general)
         {
                 var result = _context.User.AsQueryable();
 
@@ -179,7 +179,8 @@ namespace yad2.Controllers
                 result = result.Where(x => x.Username.Contains(general) || x.Password.Contains(general) || x.Email.Contains(general) || x.Phone.Contains(general));
             /* if (date.HasValue)
                  result = result.Where(x => x.DateCreated.Value.Date == date.Value.Date);*/
-            result = result.Where(x => x.isAdmin == admin);
+            if (admin != null)
+                result = result.Where(x => x.isAdmin == admin);
 
             return Json(result);
         }

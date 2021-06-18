@@ -40,10 +40,13 @@
                                 <label> מספר טלפון </label>
                                 <input id="phoneSearch" type="text" style="width: 100%" />
                             </span>
-                            <span class="col-2" style="text-align: initial">
-                                <label> האם מנהל? </label>
-                                <br />
-                                <input id="adminSearch" type="checkbox" value=""/>
+                            <span class="col-3" style="text-align: initial">
+                                בחר האם לסנן לפי שדה זה
+                                <div class="custom-control custom-switch" style="line-height:15px">
+                                    <input type="checkbox" class="custom-control-input" id="adminSearch">
+                                    </br>
+                                    <label class="custom-control-label" for="adminSearch"><input type="checkbox" id="isSearchByAdmin" /> האם מנהל?</label>
+                                </div>
                             </span>
                         </div>
                     </div>
@@ -229,12 +232,15 @@
     });
     })
     const searchUsers = () => {
+        debugger
+        const searchByAdmin = $("#isSearchByAdmin").prop('checked');
+
                 const searchFields = {
                     general: $("#generalSearch").val(),
                     username: $("#usernameSearch").val(),
                     mail: $("#mailSearch").val(),
                     phoneNumber: $("#phoneSearch").val(),
-                    admin: $("#adminSearch").prop('checked')
+                    admin: searchByAdmin ? $("#adminSearch").prop('checked') : null
                 }
 
                 getSearchedUsers(searchFields).then(function (users) {
@@ -281,12 +287,12 @@
                             "<input form='editForm_" + user.username + "' name='phoneEdit' pattern='05[0-9]{8}' value='" + user.phone + "' class='form-control' style='display:none' required />" +
                             "</td>" + isAdminData +
                             "<td>" +
-                    "<div class='container'>" +
-                        "<a class='Edit'><i class='fas fa-pencil-alt'></i></a>"+
-                        "<a class='fas fa-user-times deleteBtn' data-toggle='modal' data-user='" + user.username +"'> </a>" +
-                        "<a class='cancel fas fa-undo' style='display:none' data-user='" + user.username +"'> </a>" +
-                        "<button form='editForm_" + user.username +"' type='submit' class='Update fas fa-save' style='display:none' data-user='" + user.Username + "'></button>" +
-                    "</div> </td> <td> <form id='editForm_" + user.username +"'/> </td> </tr>"
+                            "<div class='container'>" +
+                                "<a class='Edit'><i class='fas fa-pencil-alt'></i></a>"+
+                                "<a class='fas fa-user-times deleteBtn' data-toggle='modal' data-user='" + user.username +"'> </a>" +
+                                "<a class='cancel fas fa-undo' style='display:none' data-user='" + user.username +"'> </a>" +
+                                "<button form='editForm_" + user.username +"' type='submit' class='Update fas fa-save' style='display:none' data-user='" + user.Username + "'></button>" +
+                            "</div> </td> <td> <form id='editForm_" + user.username +"'/> </td> </tr>"
                         $("#usersTableBody").append(userData);
                     })
                 })
