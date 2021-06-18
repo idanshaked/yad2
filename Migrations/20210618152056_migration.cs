@@ -2,7 +2,7 @@
 
 namespace yad2.Migrations
 {
-    public partial class storeMigration : Migration
+    public partial class migration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,7 +14,9 @@ namespace yad2.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     storeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     lat = table.Column<double>(type: "float", nullable: false),
-                    lng = table.Column<double>(type: "float", nullable: false)
+                    lng = table.Column<double>(type: "float", nullable: false),
+                    address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

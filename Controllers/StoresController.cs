@@ -61,7 +61,7 @@ namespace yad2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("storeId,storeName,lat,lng")] Store store)
+        public async Task<IActionResult> Create([Bind("storeId,storeName,lat,lng,Description,address ")] Store store)
         {
             if (ModelState.IsValid)
             {
@@ -93,7 +93,7 @@ namespace yad2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("storeId,storeName,lat,lng")] Store store)
+        public async Task<IActionResult> Edit(int id, [Bind("storeId,storeName,lat,lng,Description,address")] Store store)
         {
             if (id != store.storeId)
             {

@@ -22,7 +22,12 @@ namespace yad2.Models
 
         [Required(ErrorMessage = "please enter the store lng")]
         public double lng { get; set; }
-        
+
+        [Required(ErrorMessage = "please enter the store address")]
+        public string address { get; set; }
+ 
+        public string Description { get; set; }
+ 
         [NotMapped]
         public List<String> products { get; set; }
 

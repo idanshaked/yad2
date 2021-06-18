@@ -4,47 +4,7 @@
     ViewData["Title"] = "סניפים";
 }
 
-@*<p>
-        <a asp-action="Create">Create New</a>
-    </p>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.storeName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.lat)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.lng)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.storeName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.lat)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.lng)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.storeId">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.storeId">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.storeId">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-*@
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     function loadMap() {
@@ -76,24 +36,26 @@
         pushPin.setOptions({ enableHoverStyle: true });
         pushPin.metadata = {
             id: store.storeId,
-            title: store.storeName
+            title: store.storeName,
+            description: store.description,
+            address: store.address
         };
 
         map.entities.push(pushPin);
-@*
-        const infoboxTemplate = '<div class="customInfobox"><div class="infoboxTitle">{title}</div></div>';
-*@
+
+        const infoboxTemplate = '<div class="customInfobox" style="background-color:lightgray;":relative;"><div>{title}</div><br>{description}<br>{address}</div>  ';
+
         const infobox = new Microsoft.Maps.Infobox(pushPin.getLocation(), {
             visible: false
         });
 
         infobox.setMap(map);
 
-@*        const showInfobox = e => {
+        const showInfobox = e => {
             if (e.target.metadata) {
                 infobox.setOptions({
                     location: e.target.getLocation(),
-                    htmlContent: infoboxTemplate.replace('{title}', e.target.metadata.title).replace('{description}', e.target.metadata.description),
+                    htmlContent: infoboxTemplate.replace('{title}', e.target.metadata.title).replace('{description}', e.target.metadata.description).replace('{address}', e.target.metadata.address),
                     visible: true
                 });
             }
@@ -103,20 +65,58 @@
         }
 
 
-        Microsoft.Maps.Events.addHandler(pushPin, 'mouseover', showInfobox);
-        Microsoft.Maps.Events.addHandler(pushPin, 'mouseout', hideInfobox);*@
+        Microsoft.Maps.Events.addHandler(pushPin, 'mouseout', hideInfobox);
+        Microsoft.Maps.Events.addHandler(pushPin, 'click', showInfobox);
     };
 
 </script>
 <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?branch=release&callback=loadMap' async defer></script>
-
-
-<div class="mapPageWrapper" style="direction = rtl">
-
-    <h4>הסניפים שלנו ברחבי הארץ</h4>
-
-    <div style="padding: 2rem;"></div>
-
-    <div id="map" style="position:relative;width:800px;height:350px;"></div>
+<div>
+<div>
+    <h1 style="text-align:right;">מקומות האיסוף שלנו</h1>
 </div>
-
+    <br />
+<div class="mapPageWrapper">
+    <div id="map" style="width:800px;height:350px;"></div>
+</div>
+<p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                   מקום האיסוף
+                </th>
+                <th>
+                    כתובת
+                </th>
+                <th>
+                    תיאור
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.storeName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.address)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.storeId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.storeId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.storeId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
