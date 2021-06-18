@@ -23,8 +23,11 @@ namespace yad2.Controllers
         // GET: Users
         public async Task<IActionResult> Index()
         {
+            
             return View(await _context.User.ToListAsync());
         }
+
+      
 
         // GET: Users/Details/5
         public async Task<IActionResult> Details(string id)
@@ -162,6 +165,23 @@ namespace yad2.Controllers
             return _context.User.Any(e => e.Username == id);
         }
 
+        public async Task<IActionResult> Search(string username, string phoneNumber, string mail, bool admin, string general)
+        {
+                var result = _context.User.AsQueryable();
 
+            if (!String.IsNullOrWhiteSpace(username))
+                result = result.Where(x => x.Username.Contains(username));
+            if (!String.IsNullOrWhiteSpace(phoneNumber))
+                result = result.Where(x => x.Phone.Contains(phoneNumber));
+            if (!String.IsNullOrWhiteSpace(mail))
+                result = result.Where(x => x.Email.Contains(mail));
+            if (!String.IsNullOrWhiteSpace(general))
+                result = result.Where(x => x.Username.Contains(general) || x.Password.Contains(general) || x.Email.Contains(general) || x.Phone.Contains(general));
+            /* if (date.HasValue)
+                 result = result.Where(x => x.DateCreated.Value.Date == date.Value.Date);*/
+            result = result.Where(x => x.isAdmin == admin);
+
+            return Json(result);
+        }
     }
 }
