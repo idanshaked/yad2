@@ -149,5 +149,10 @@ namespace yad2.Controllers
         {
             return _context.Tags.Any(e => e.tagId == id);
         }
+
+        public async Task<List<Tags>> All()
+        {
+            return await _context.Tags.ToListAsync();
+        }
     }
 }
