@@ -10,7 +10,7 @@ namespace yad2.Models
     public class Post
     {
         [Key]
-        public int Id { get; set; }
+        public int PostID { get; set; }
 
         public User Publisher { get; set; }
 
