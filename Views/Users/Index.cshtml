@@ -167,9 +167,6 @@
 
     $(document).ready(function () {
 
-        $('#createBtn').click(function () {
-            var url = $('#createModal').data('url');
-
             $(".table").on("submit", 'form', function (event) {
                 event.preventDefault();
                 var row = $(this).closest("tr");
@@ -218,7 +215,8 @@
                     $("#mailSearch").val('');
                     $("#phoneSearch").val('');
                     $("#generalSearch").val('');
-                    $("#adminSearch").checked(false);
+                    $("#adminSearch").prop('checked', false)
+                    $("#isSearchByAdmin").prop('checked', false)
 
                     $.ajax({
                         type: "POST",
@@ -234,8 +232,8 @@
                 }
                 return false;
             });
-        })
     })
+
     const searchUsers = () => {
         const searchByAdmin = $("#isSearchByAdmin").prop('checked');
 

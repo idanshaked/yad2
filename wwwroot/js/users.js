@@ -55,8 +55,6 @@ $(".table").on("click", ".Edit", function () {
     $(this).hide();
 });
 
-
-
 $(".table").on("click", ".cancel", function () {
     var row = $(this).closest("tr");
     $("td", row).each(function () {
