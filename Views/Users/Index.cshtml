@@ -211,13 +211,6 @@
                     token = $(token).val();
                     modifiedUser.__requestverificationtoken = token;
 
-                    $("#usernameSearch").val('');
-                    $("#mailSearch").val('');
-                    $("#phoneSearch").val('');
-                    $("#generalSearch").val('');
-                    $("#adminSearch").prop('checked', false)
-                    $("#isSearchByAdmin").prop('checked', false)
-
                     $.ajax({
                         type: "POST",
                         url: "/Users/Edit/5",
