@@ -4,7 +4,7 @@
 }
 
 <head>
-    <link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
+    
     <link rel="stylesheet" href="~/css/usersTable.css" />
 </head>
 
@@ -164,75 +164,79 @@
 <script src="~/js/users.js"></script>
 <script src="~/js/Search.js"></script>
 <script>
+
     $(document).ready(function () {
 
-        $(".table").on("submit", 'form' ,function (event) {
-            event.preventDefault();
-            var row = $(this).closest("tr");
-            var modifiedUser = {};
-            modifiedUser.Username = row.find(".username").find("input").val();
-            modifiedUser.Password = row.find(".password").find("input").val();
-            modifiedUser.Email = row.find(".mail").find("input").val();
-            modifiedUser.Phone = row.find(".phone").find("input").val();
-            modifiedUser.id = modifiedUser.Username;
-            const validationMessages = validateUser(modifiedUser);
-            if (validationMessages.length == 0) {
-                $("td", row).each(function () {
-                    if ($(this).find("input").length > 0) {
-                        var span = $(this).find("span");
-                        var input = $(this).find("input");
-                        if ($(this).hasClass('isAdmin')) {
-                            input = $(this).find('#editable')
-                            if (!input[0].checked) {
-                                $(this).find("#realValue").prop('checked', false)
+        $('#createBtn').click(function () {
+            var url = $('#createModal').data('url');
+
+            $(".table").on("submit", 'form', function (event) {
+                event.preventDefault();
+                var row = $(this).closest("tr");
+                var modifiedUser = {};
+                modifiedUser.Username = row.find(".username").find("input").val();
+                modifiedUser.Password = row.find(".password").find("input").val();
+                modifiedUser.Email = row.find(".mail").find("input").val();
+                modifiedUser.Phone = row.find(".phone").find("input").val();
+                modifiedUser.id = modifiedUser.Username;
+                const validationMessages = validateUser(modifiedUser);
+                if (validationMessages.length == 0) {
+                    $("td", row).each(function () {
+                        if ($(this).find("input").length > 0) {
+                            var span = $(this).find("span");
+                            var input = $(this).find("input");
+                            if ($(this).hasClass('isAdmin')) {
+                                input = $(this).find('#editable')
+                                if (!input[0].checked) {
+                                    $(this).find("#realValue").prop('checked', false)
+                                } else {
+                                    $(this).find("#realValue").prop('checked', true)
+                                }
+                            } else if (!$(this).hasClass('mail')) {
+                                span.html(input.val());
                             } else {
-                                $(this).find("#realValue").prop('checked', true)
+                                const mail = input.val();
+                                const mailHref = "mailto:" + mail;
+                                span.html("<a href=" + mailHref + ">" + mail + "</a>")
                             }
-                        } else if (!$(this).hasClass('mail')) {
-                            span.html(input.val());
-                        } else {
-                            const mail = input.val();
-                            const mailHref = "mailto:" + mail;
-                            span.html("<a href=" + mailHref + ">" + mail + "</a>")
+                            span.show();
+                            input.hide();
                         }
-                        span.show();
-                        input.hide();
-                    }
-                });
-                row.find(".Edit").show();
-                row.find(".deleteBtn").show();
-                row.find(".Update").hide();
-                row.find(".cancel").hide();
-                $(this).hide();
+                    });
+                    row.find(".Edit").show();
+                    row.find(".deleteBtn").show();
+                    row.find(".Update").hide();
+                    row.find(".cancel").hide();
+                    $(this).hide();
 
-                modifiedUser.isAdmin = row.find(".isAdmin").find("span").find("#realValue")[0].checked
-                var token = '@Html.AntiForgeryToken()';
-                token = $(token).val();
-                modifiedUser.__requestverificationtoken = token;
+                    modifiedUser.isAdmin = row.find(".isAdmin").find("span").find("#realValue")[0].checked
+                    var token = '@Html.AntiForgeryToken()';
+                    token = $(token).val();
+                    modifiedUser.__requestverificationtoken = token;
 
-                $("#usernameSearch").val('');
-                $("#mailSearch").val('');
-                $("#phoneSearch").val('');
-                $("#generalSearch").val('');
-                $("#adminSearch").checked(false);
+                    $("#usernameSearch").val('');
+                    $("#mailSearch").val('');
+                    $("#phoneSearch").val('');
+                    $("#generalSearch").val('');
+                    $("#adminSearch").checked(false);
 
-                $.ajax({
-                    type: "POST",
-                    url: "/Users/Edit/5",
-                    dataType: "JSON",
-                    data: modifiedUser
-                })
-            } else {
-                validationMessages.forEach(field => {
-                    let inputField = row.find(`.` + field + ' input');
-                    inputField.addClass('has-error')
-                })
-    }
-    return false;
-    });
+                    $.ajax({
+                        type: "POST",
+                        url: "/Users/Edit/5",
+                        dataType: "JSON",
+                        data: modifiedUser
+                    })
+                } else {
+                    validationMessages.forEach(field => {
+                        let inputField = row.find(`.` + field + ' input');
+                        inputField.addClass('has-error')
+                    })
+                }
+                return false;
+            });
+        })
     })
     const searchUsers = () => {
-        debugger
         const searchByAdmin = $("#isSearchByAdmin").prop('checked');
 
                 const searchFields = {

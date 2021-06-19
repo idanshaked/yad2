@@ -1,0 +1,26 @@
+﻿.flex-container {
+    display: flex;
+    flex-flow: column wrap;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-top: 5%;
+}
+.card-body {
+    background-color: #ffa433;
+    text-align: center;
+}
+.card {
+    width: 27%;
+    margin-top: 20px;
+    background-color: lemonchiffon;
+    margin: 2%;
+}
+
+.fas {
+    float: left;
+    color:#aba7a7;
+}
+
+
+
+
