@@ -58,7 +58,7 @@ namespace yad2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Username,Password,Email,Phone,isAdmin")] yad2.Models.User user, String Phone)
+        public async Task<IActionResult> Create([Bind("Username,Password,Email,Phone,isAdmin")] yad2.Models.User user)
         {
             var originalUser = await _context.User
                 .FirstOrDefaultAsync(m => m.Username == user.Username);
