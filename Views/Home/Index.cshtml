@@ -1,0 +1,92 @@
+﻿
+
+@{
+    ViewBag.Title = "Yad2";
+}
+<html>
+<head>
+    <style>
+        .header {
+            background-image: url("https://assets.yad2.co.il/yad2site/y2assets/images/pages/home/background.png");
+            height: 340px;
+            padding-right: 20px;
+            color: #717171;
+            margin-bottom: 3%;
+        }
+
+        .header > img {
+            width: 250px;
+        }
+
+        body {
+            text-align: right;
+        }
+
+        .header-button {
+            margin-top: 28px;
+        }
+
+        .recommended-tags {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: space-around;
+            margin: 5% 0px 5% 0px;
+        }
+
+        .tag-item {
+            display: flex;
+            flex-direction: column;
+            border: solid 1.5px;
+            border-radius: 70px;
+            padding: 20px 30px;
+            text-align: center;
+            border-color: #cacaca;
+        }
+
+        .tag-icon {
+            font-size: 210%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <img src="https://assets.yad2.co.il/yad2site/y2assets/images/header/yad2Logo.png" />
+        <h3>קניות בפשטות, קלילות ומהירות</h3>
+        <a type="button" class="btn btn-primary header-button" asp-area="" asp-controller="Products" asp-action="Index">קניית מוצרים</a>
+    </div>
+    <h3>תגיות מובילות</h3>
+    <hr>
+    <div class="recommended-tags">
+        <div class="tag-item">
+            <i class="fas fa-car tag-icon"></i>
+            רכב
+        </div>
+        <div class="tag-item">
+            <i class="far fa-building tag-icon"></i>
+            נדל"ן
+        </div>
+        <div class="tag-item">
+            <i class="fas fa-laptop tag-icon"></i>
+            מחשב
+        </div>
+        <div class="tag-item">
+            <i class="fas fa-car tag-icon"></i>
+            רכב
+        </div>
+        <div class="tag-item">
+            <i class="fas fa-car tag-icon"></i>
+            רכב
+        </div>
+    </div>
+    <h3>?מי אנחנו</h3>
+    <hr>
+    <iframe width="1140" height="500" src="https://www.youtube.com/embed/PZ9_OC7LQBk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <hr />
+    @*<script type="text/javascript">
+            document.getElementById("furniture").onclick = function () {
+                location.href = "/Notices?SearchString=furniture";
+            };
+        </script>*@
+</body>
+</html>
