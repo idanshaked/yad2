@@ -29,7 +29,8 @@ namespace yad2.Migrations
                 {
                     tagId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    tageName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    tageName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    tagIcon = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

@@ -9,7 +9,7 @@ using yad2.Data;
 namespace yad2.Migrations
 {
     [DbContext(typeof(yad2Context))]
-    [Migration("20210619140450_migration")]
+    [Migration("20210619155249_migration")]
     partial class migration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,6 +55,9 @@ namespace yad2.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("tagIcon")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("tageName")
                         .IsRequired()

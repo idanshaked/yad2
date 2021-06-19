@@ -14,5 +14,7 @@ namespace yad2.Models
 
         [Required(ErrorMessage = "please enter the tag Name")]
         public String tageName { get; set; }
+
+        public String tagIcon { get; set; }
     }
 }

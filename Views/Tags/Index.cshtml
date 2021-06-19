@@ -3,13 +3,46 @@
 @{
     ViewData["Title"] = "Index";
 }
+<head>
+    <link rel="stylesheet" href="~/css/tag.css" />
+</head>
 <div style="text-align:right;">
     <h1>ניהול תגיות</h1>
+    <div class="flex-container">
+        @foreach (var item in Model)
+        {
+        <div class="card border-dark mb-3">
+            <div class="card-body">
+                    <a asp-action="Edit" asp-route-id="@item.tagId">
+                        <i class="fas fa-pen"></i>
+                    </a> 
+                <p class="card-text"> @Html.DisplayFor(modelItem => item.tageName)</p>
+            </div>
+        </div>
+        }
+     </div>
+</div>
+
+
+            @*<tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.tageName)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.tagId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.tagId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.tagId">Delete</a>
+                </td>
+            </tr>
+        }
+    </div>
+
+
 
     <p>
         <a asp-action="Create">Create New</a>
-    </p>
-    <table class="table">
+    </p>*@
+    @*<table class="table">
         <thead>
             <tr>
                 <th>
@@ -33,5 +66,5 @@
                 </tr>
             }
         </tbody>
-    </table>
-</div>
+    </table>*@
+@*</div>*@

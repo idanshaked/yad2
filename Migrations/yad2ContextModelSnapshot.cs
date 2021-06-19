@@ -54,6 +54,9 @@ namespace yad2.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("tagIcon")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("tageName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
