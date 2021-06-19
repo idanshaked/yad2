@@ -47,6 +47,22 @@ namespace yad2.Migrations
                     b.ToTable("Store");
                 });
 
+            modelBuilder.Entity("yad2.Models.Tags", b =>
+                {
+                    b.Property<int>("tagId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("tageName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("tagId");
+
+                    b.ToTable("Tags");
+                });
+
             modelBuilder.Entity("yad2.Models.User", b =>
                 {
                     b.Property<string>("Username")

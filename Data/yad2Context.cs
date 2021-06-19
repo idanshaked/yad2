@@ -17,5 +17,7 @@ namespace yad2.Data
         public DbSet<yad2.Models.User> User { get; set; }
 
         public DbSet<yad2.Models.Store> Store { get; set; }
+
+        public DbSet<yad2.Models.Tags> Tags { get; set; }
     }
 }

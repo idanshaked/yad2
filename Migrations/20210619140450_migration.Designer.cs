@@ -9,7 +9,7 @@ using yad2.Data;
 namespace yad2.Migrations
 {
     [DbContext(typeof(yad2Context))]
-    [Migration("20210618152056_migration")]
+    [Migration("20210619140450_migration")]
     partial class migration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,6 +47,22 @@ namespace yad2.Migrations
                     b.HasKey("storeId");
 
                     b.ToTable("Store");
+                });
+
+            modelBuilder.Entity("yad2.Models.Tags", b =>
+                {
+                    b.Property<int>("tagId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("tageName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("tagId");
+
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("yad2.Models.User", b =>
