@@ -1,0 +1,121 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Statistics Page";
+}
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.3.2/dist/chart.min.js"></script>
+</head>
+<h1 class="title">סטטיסטיקות</h1>
+
+<div class="chart-row">
+    <div class="single-chart">
+        <h3>
+            פילוח תגיות
+        </h3>
+        <div class="chart-container">
+            <canvas id="myChart"></canvas>
+        </div>
+    </div>
+    <div class="single-chart">
+        <h3>
+            פילוח תגיות
+        </h3>
+        <div class="chart-container">
+            <canvas id="myChart2"></canvas>
+        </div>
+    </div>
+</div>
+
+<div class="chart-row">
+    <div class="single-chart">
+        <h3>
+            פילוח תגיות
+        </h3>
+        <div class="chart-container">
+            <canvas id="myChart3"></canvas>
+        </div>
+    </div>
+    <div class="single-chart">
+        <h3>
+            פילוח תגיות
+        </h3>
+        <div class="chart-container">
+            <canvas id="myChart4"></canvas>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        direction: rtl;
+        text-align:right;
+    }
+
+    .chart-container {
+    }
+
+    .single-chart {
+        text-align:center;
+        width: 30%;
+    }
+
+    .chart-row {
+        display: flex;
+        justify-content:space-around;
+        margin-bottom: 3%;
+    }
+</style>
+
+<script>
+
+    $(document).ready(function () {
+        const postsByTagsData = {
+            labels: [
+                'נדלן',
+                'רכב',
+                'מחשבים'
+            ],
+            datasets: [{
+                label: 'My First Dataset',
+                data: [],
+                backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)',
+                    'rgb(255, 205, 86)'
+                ],
+                hoverOffset: 4
+            }]
+        };
+
+        // Get amount of posts grouped by its tags
+        $.ajax({
+            url: '/Stats/PostsGroupByTags',
+            type: 'get',
+            success: function (data) {
+                console.log("sarted");
+                postsByTagsData.datasets[0].data = JSON.parse(data);
+                const config = { type: 'pie', data:postsByTagsData, options: {} };
+                const myChart = new Chart(
+                    document.getElementById('myChart'),
+                    config
+                );
+                const myChart3 = new Chart(
+                    document.getElementById('myChart3'),
+                    config
+                );
+                const myChart4 = new Chart(
+                    document.getElementById('myChart4'),
+                    config
+                );
+                const myChart2 = new Chart(
+                    document.getElementById('myChart2'),
+                    config
+                );
+            }
+        });
+    });
+
+</script>
