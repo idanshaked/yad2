@@ -14,8 +14,7 @@ namespace yad2.Models
 
         public User Publisher { get; set; }
 
-        //TODO: Change to Tag entity
-        public string Tags { get; set; }
+        public Tags[] Tags { get; set; }
 
         //TODO: Change to Product entity
         public string Product { get; set; }
