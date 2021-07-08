@@ -1,0 +1,25 @@
+﻿@model yad2.Models.User
+
+@{
+    ViewData["Title"] = "AccessDenied";
+}
+
+<style>
+    .accessDenied {
+        text-align: center;
+        margin-top: 4%;
+    }
+</style>
+
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<body>
+    <div class="accessDenied">
+        <h1>אופס !!!!</h1>
+        <h2>אתה לא מורשה להיכנס לעמוד זה</h2>
+
+        <a asp-action="Logout">הקלק כאן</a> כדי להחליף משתמש
+    </div>
+
+</body>
+</html>

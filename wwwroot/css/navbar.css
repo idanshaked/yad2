@@ -1,0 +1,45 @@
+﻿.mr-auto, .mx-auto {
+    margin-right: 0px !important;
+}
+
+.search-form {
+    position: absolute !important;
+    left: 9% !important;
+}
+
+.login {
+    position: absolute;
+    left: 2%;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    line-height: 50px;
+    background-color: #f5f5f5;
+}
+
+.vertical-links > li {
+    display: inline-block;
+}
+
+    .vertical-links > li > a {
+        font-weight: 400;
+        margin-left: 1rem;
+        list-style-type: square;
+    }
+
+.contact {
+    margin-right: 1%;
+}
+
+.user {
+    padding: .5rem 1rem;
+    position: absolute;
+    left: 30%;
+}
+
+.main-margin {
+    margin: 0px 5% 0px 5%;
+}
