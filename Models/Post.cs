@@ -17,7 +17,7 @@ namespace yad2.Models
         public List<Tags> Tags { get; set; }
 
         //TODO: Change to Product entity
-        public string Product { get; set; }
+        public Product Product { get; set; }
 
         // Save the urls as a string formatted with ; as a seperator
         public string PicUrls { get; set; }
