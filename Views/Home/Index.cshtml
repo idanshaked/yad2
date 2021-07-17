@@ -1,6 +1,4 @@
-﻿
-
-@{
+﻿@{
     ViewBag.Title = "Yad2";
 }
 <html>
@@ -58,26 +56,13 @@
     <h3>תגיות מובילות</h3>
     <hr>
     <div class="recommended-tags">
-        <div class="tag-item">
-            <i class="fas fa-car tag-icon"></i>
-            רכב
-        </div>
-        <div class="tag-item">
-            <i class="far fa-building tag-icon"></i>
-            נדל"ן
-        </div>
-        <div class="tag-item">
-            <i class="fas fa-laptop tag-icon"></i>
-            מחשב
-        </div>
-        <div class="tag-item">
-            <i class="fas fa-car tag-icon"></i>
-            רכב
-        </div>
-        <div class="tag-item">
-            <i class="fas fa-car tag-icon"></i>
-            רכב
-        </div>
+        @foreach (var tag in ViewBag.tags)
+        {
+            <div class="tag-item">
+                <i class="@tag.tagIcon tag-icon"></i>
+                @tag.tageName
+            </div>
+        }
     </div>
     <h3>?מי אנחנו</h3>
     <hr>

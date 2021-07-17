@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using yad2.Data;
 using yad2.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -15,15 +16,19 @@ namespace yad2.Controllers
     public class HomeController : Controller
     {
 
-        private readonly Data.yad2Context _context;
+        private readonly yad2Context _context;
 
-        public HomeController(Data.yad2Context context)
+        private readonly ILogger<HomeController> _logger;
+
+        public HomeController(ILogger<HomeController> logger, yad2Context context)
         {
+            _logger = logger;
             _context = context;
         }
 
         public IActionResult Index()
         {
+            ViewBag.tags = _context.Tags.ToList(); //_context.Tags.ToList();
             return View();
         }
 
