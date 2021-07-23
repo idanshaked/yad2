@@ -12,6 +12,8 @@ namespace yad2.Models
         public int ProductID { get; set; }
         public String description { set; get; }
         public int price { set; get; }
+        public int PostID { get; set; }
+
         public Post Post { get; set; }
     }
 }

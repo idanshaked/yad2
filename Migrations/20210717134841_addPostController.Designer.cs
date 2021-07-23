@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using yad2.Data;
 
 namespace yad2.Migrations
 {
     [DbContext(typeof(yad2Context))]
-    partial class yad2ContextModelSnapshot : ModelSnapshot
+    [Migration("20210717134841_addPostController")]
+    partial class addPostController
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -147,7 +149,7 @@ namespace yad2.Migrations
             modelBuilder.Entity("yad2.Models.Post", b =>
                 {
                     b.HasOne("yad2.Models.User", "Publisher")
-                        .WithMany("Posts")
+                        .WithMany()
                         .HasForeignKey("PublisherUsername");
 
                     b.Navigation("Publisher");
@@ -176,11 +178,6 @@ namespace yad2.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("Tags");
-                });
-
-            modelBuilder.Entity("yad2.Models.User", b =>
-                {
-                    b.Navigation("Posts");
                 });
 #pragma warning restore 612, 618
         }
