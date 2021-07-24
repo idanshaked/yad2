@@ -1,41 +1,281 @@
 ﻿@model IEnumerable<yad2.Models.Post>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "מוצרים";
 }
 
-<h1>Index</h1>
+<head>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.PicUrls)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PublishDate)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.PicUrls)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PublishDate)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.PostID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.PostID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.PostID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <link rel="stylesheet" href="~/css/usersTable.css" />
+</head>
+
+<div style="height: 60px">
+    <h1 class="title">מוצרים</h1>
+</div>
+<div style="width:100%">
+    <div style="height: 36px;">
+        <h5 style="float: right; margin-left: 15px;">חיפוש בסיסי </h5>
+        <input type="text" id="generalSearch" style="float: right;" />
+    </div>
+
+    <div class="accordion" style="height:auto" id="category-accordion">
+        <div class="card">
+            <div class="card-header" data-toggle="collapse" data-target="#category-1">
+                <h5 class="mb-0" style="text-align:right">
+                    חיפוש מתקדם
+                </h5>
+            </div>
+            <div id="category-1" class="collapse" data-parent="#category-accordion">
+                <div>
+                    <div class="container" style="margin-bottom: 10px;">
+                        <div class="row">
+                            <span class="col-2" style="text-align: initial">
+                                <label> שם משתמש </label>
+                                <input id="usernameSearch" type="text" style="width: 100%" />
+                            </span>
+                            <span class="col-2" style="text-align: initial">
+                                <label> מייל </label>
+                                <input id="mailSearch" type="text" style="width: 100%" />
+                            </span>
+                            <span class="col-2" style="text-align: initial">
+                                <label> מספר טלפון </label>
+                                <input id="phoneSearch" type="text" style="width: 100%" />
+                            </span>
+                            <span class="col-3" style="text-align: initial">
+                                בחר האם לסנן לפי שדה זה
+                                <div class="custom-control custom-switch" style="line-height:15px">
+                                    <input type="checkbox" class="custom-control-input" id="adminSearch">
+                                    </br>
+                                    <label class="custom-control-label" for="adminSearch"><input type="checkbox" id="isSearchByAdmin" /> האם מנהל?</label>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <button onclick="searchUsers()"> חפש </button>
+    </div>
+</div>
+
+<style>
+    .noPosts {
+        width: 100%;
+        height: 100%;
+        text-align: center;
+    }
+
+        .noPosts p {
+            margin-top: 15%;
+            font-weight: bold;
+        }
+
+    .postList {
+        display: flex;
+        flex-flow: row wrap;
+        width: 100%;
+        overflow: auto;
+        max-height: 43vh;
+    }
+
+    .postBlock {
+        display: inline-block;
+        margin-right: 2%;
+    }
+
+    .postImg {
+        width: 10vw;
+        height: 30vh;
+    }
+
+    .postText {
+        width: 10vw;
+        font-weight: bold;
+        text-align: center;
+    }
+</style>
+
+
+<hr />
+@if (Model.Count() == 0)
+{
+    <div class="noPosts">
+        <p> הוסף את הפוסט הראשון שלך</p>
+    </div> }
+else
+{
+    <div class="postList">
+        @foreach (var item in Model)
+        {
+
+            <div class="postBlock">
+                <img data-url='@Url.Action("Details")' asp-route-id="@item.PostID" style="color: black" src="@item.PicUrls" class="postImg" />
+
+        
+            </div>}
+    </div>}
+
+
+<button type="button" id="createBtn" class="btn btn-primary float-lg-none circular" data-toggle="modal">
+    <i class="fas fa-plus"></i>
+</button>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="deleteModal" data-url='@Url.Action("Delete")'>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close closeBtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">שים לב!</h4>
+            </div>
+            <div id="deleteContent"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-url='@Url.Action("Create")'>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <button type="button" class="close" id="createCloseBtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <div id="createContent">
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/users.js"></script>
+<script src="~/js/Search.js"></script>
+<script>
+
+    $(document).ready(function () {
+
+            $(".table").on("submit", 'form', function (event) {
+                event.preventDefault();
+                var row = $(this).closest("tr");
+                var modifiedUser = {};
+                modifiedUser.Username = row.find(".username").find("input").val();
+                modifiedUser.Password = row.find(".password").find("input").val();
+                modifiedUser.Email = row.find(".mail").find("input").val();
+                modifiedUser.Phone = row.find(".phone").find("input").val();
+                modifiedUser.id = modifiedUser.Username;
+                const validationMessages = validateUser(modifiedUser);
+                if (validationMessages.length == 0) {
+                    $("td", row).each(function () {
+                        if ($(this).find("input").length > 0) {
+                            var span = $(this).find("span");
+                            var input = $(this).find("input");
+                            if ($(this).hasClass('isAdmin')) {
+                                input = $(this).find('#editable')
+                                if (!input[0].checked) {
+                                    $(this).find("#realValue").prop('checked', false)
+                                } else {
+                                    $(this).find("#realValue").prop('checked', true)
+                                }
+                            } else if (!$(this).hasClass('mail')) {
+                                span.html(input.val());
+                            } else {
+                                const mail = input.val();
+                                const mailHref = "mailto:" + mail;
+                                span.html("<a href=" + mailHref + ">" + mail + "</a>")
+                            }
+                            span.show();
+                            input.hide();
+                        }
+                    });
+                    row.find(".Edit").show();
+                    row.find(".deleteBtn").show();
+                    row.find(".Update").hide();
+                    row.find(".cancel").hide();
+                    $(this).hide();
+
+                    modifiedUser.isAdmin = row.find(".isAdmin").find("span").find("#realValue")[0].checked
+                    var token = '@Html.AntiForgeryToken()';
+                    token = $(token).val();
+                    modifiedUser.__requestverificationtoken = token;
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/Users/Edit/5",
+                        dataType: "JSON",
+                        data: modifiedUser
+                    })
+                } else {
+                    validationMessages.forEach(field => {
+                        let inputField = row.find(`.` + field + ' input');
+                        inputField.addClass('has-error')
+                    })
+                }
+                return false;
+            });
+    })
+
+    const searchUsers = () => {
+        const searchByAdmin = $("#isSearchByAdmin").prop('checked');
+
+                const searchFields = {
+                    general: $("#generalSearch").val(),
+                    username: $("#usernameSearch").val(),
+                    mail: $("#mailSearch").val(),
+                    phoneNumber: $("#phoneSearch").val(),
+                    admin: searchByAdmin ? $("#adminSearch").prop('checked') : null
+                }
+
+                getSearchedUsers(searchFields).then(function (users) {
+                    $("#usersTableBody").html('');
+                    users.forEach(user => {
+                        const mailHref = "mailto:" + user.email;
+
+                        let isAdminData;
+                        if (user.isAdmin) {
+                            isAdminData = "<td class='isAdmin'>" +
+                                "<span> <input type='checkbox' disabled id='realValue' checked=" + user.isAdmin + " /> </span>" +
+                                "<input form='editForm_" + user.username + "'  type='checkbox' id='editable' checked=" + user.isAdmin + " style='display:none' />" +
+                                "</td>"
+                        } else {
+                            isAdminData = "<td class='isAdmin'>" +
+                                "<span> <input type='checkbox' disabled id='realValue' /> </span>" +
+                                "<input form='editForm_" + user.username + "'  type='checkbox' id='editable' style='display:none' />" +
+                                "</td> "
+                        }
+                        const userData =
+                            " <tr>" +
+                            "<td class='username'>" +
+                            "<span data-val='" + user.username + "'>" +
+                            user.username +
+                            "</span>" +
+                            "<input form='editForm_" + user.username + "' value='" + user.username + "' name='usernameEdit' class='form-control' style='display:none' required />" +
+                            "</td>" +
+                            "<td class='password form-group'>" +
+                            "<span data-val='" + user.password + "'> " +
+                            user.password +
+                            "</span>" +
+                            "<input form='editForm_" + user.username +"' value='" + user.password + "' name='passEdit' class='form-control' style='display:none' required />" +
+                            "</td>" +
+                            "<td class='mail'>" +
+                            "<span data-val='" + user.email + "'>" +
+                            "<a href='" + mailHref + "'>" + user.email + "</a>" +
+                            "</span>" +
+                            "<input form='editForm_" + user.username + "' name='mailEdit' value='" + user.email +"' class='form-control' style='display:none' required />" +
+                            "</td>" +
+                            "<td class='phone'>" +
+                            "<span data-val='" + user.phone + "'>" +
+                            user.phone +
+                            "</span>" +
+                            "<input form='editForm_" + user.username + "' name='phoneEdit' pattern='05[0-9]{8}' value='" + user.phone + "' class='form-control' style='display:none' required />" +
+                            "</td>" + isAdminData +
+                            "<td>" +
+                            "<div class='container'>" +
+                                "<a class='Edit'><i class='fas fa-pencil-alt'></i></a>"+
+                                "<a class='fas fa-user-times deleteBtn' data-toggle='modal' data-user='" + user.username +"'> </a>" +
+                                "<a class='cancel fas fa-undo' style='display:none' data-user='" + user.username +"'> </a>" +
+                                "<button form='editForm_" + user.username +"' type='submit' class='Update fas fa-save' style='display:none' data-user='" + user.Username + "'></button>" +
+                            "</div> </td> <td> <form id='editForm_" + user.username +"'/> </td> </tr>"
+                        $("#usersTableBody").append(userData);
+                    })
+                })
+            }
+</script>
+

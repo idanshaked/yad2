@@ -1,27 +1,50 @@
 ﻿@model yad2.Models.Post
 
+
 @{
+    Layout = null;
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<style>
+    .form-group {
+        text-align: start;
+    }
 
-<h4>Post</h4>
-<hr />
+    form {
+        direction: rtl;
+    }
+</style>
+
+<div class="header">
+    <h4 class="modal-title" id="myModalLabel"> הוספת פוסט חדש</h4>
+</div>
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
+    <div class="col-md-12">
+        <form asp-action="Create" asp-route-returnurl='@Context.Request.Query["ReturnUrl"]'>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="PicUrls" class="control-label"></label>
-                <input asp-for="PicUrls" class="form-control" />
-                <span asp-validation-for="PicUrls" class="text-danger"></span>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label asp-for="Product.price">מחיר </label>
+                    <input asp-for="Product.price" type="number" class="form-control" id="priceInput" required />
+                    <span asp-validation-for="Product.price" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="Product.description">תיאור </label>
+                    <textarea asp-for="Product.description" id="descriptionInput" required> </textarea>
+                    <span asp-validation-for="Product.description" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="PublishDate" class="control-label"></label>
-                <input asp-for="PublishDate" class="form-control" />
-                <span asp-validation-for="PublishDate" class="text-danger"></span>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label asp-for="PicUrls"> כתובת של תמונות - הפרדה בעזרת ; </label>
+                    <input asp-for="PicUrls" type="text" class="form-control" id="picsInput" required />
+                    <span asp-validation-for="PicUrls" class="text-danger"></span>
+                </div>
             </div>
+
+
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -29,10 +52,3 @@
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

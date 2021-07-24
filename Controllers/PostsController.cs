@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using yad2.Data;
 using yad2.Models;
+using System.Security.Claims;
 
 namespace yad2.Controllers
 {
@@ -54,10 +55,16 @@ namespace yad2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PostID,PicUrls,PublishDate")] Post post)
+        public async Task<IActionResult> Create([Bind("PostID,PicUrls,PublishDate")] Post post, Product product)
         {
             if (ModelState.IsValid)
             {
+                string username = ((ClaimsIdentity)User.Identity).Name;
+                post.Publisher = _context.User.Where(x => x.Username.Equals(username)).FirstOrDefault();
+                post.Product = product;
+                post.PublishDate = DateTime.Now;
+                post.PicUrls = post.PicUrls;
+
                 _context.Add(post);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
