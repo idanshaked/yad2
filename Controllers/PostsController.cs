@@ -45,8 +45,13 @@ namespace yad2.Controllers
         }
 
         // GET: Posts/Create
-        public IActionResult Create()
+        public async Task<ViewResult> Create()
         {
+            List<SelectListItem> tags = new List<SelectListItem>();
+            var allTags = await(from g in _context.Tags select g).ToListAsync();
+            foreach (Tags tag in allTags)
+                tags.Add(new SelectListItem(tag.tageName, tag.tagId.ToString()));
+            ViewData["Tags"] = tags;
             return View();
         }
 

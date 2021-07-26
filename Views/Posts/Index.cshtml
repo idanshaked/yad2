@@ -4,21 +4,30 @@
     ViewData["Title"] = "מוצרים";
 }
 
-<head>
 
-    <link rel="stylesheet" href="~/css/usersTable.css" />
+
+<head>
+    <link rel="stylesheet" href="~/css/post.css"/>
 </head>
 
 <div style="height: 60px">
     <h1 class="title">מוצרים</h1>
 </div>
 <div style="width:100%">
-    <div style="height: 36px;">
-        <h5 style="float: right; margin-left: 15px;">חיפוש בסיסי </h5>
-        <input type="text" id="generalSearch" style="float: right;" />
+    <div class="search_navbar">
+        <button type="button" id="createBtn" class="btn btn-primary float-lg-none circular" data-toggle="modal">
+            <i class="fas fa-plus"></i>
+        </button>
+
+
+        <span style="height: 36px;">
+
+            <h5 style="float: right; margin-left: 15px;">חיפוש בסיסי </h5>
+            <input type="text" id="generalSearch" style="float: right;" />
+        </span>
     </div>
 
-    <div class="accordion" style="height:auto" id="category-accordion">
+    <div class="accordion search_navbar" style="height:auto" id="category-accordion">
         <div class="card">
             <div class="card-header" data-toggle="collapse" data-target="#category-1">
                 <h5 class="mb-0" style="text-align:right">
@@ -60,42 +69,7 @@
     </div>
 </div>
 
-<style>
-    .noPosts {
-        width: 100%;
-        height: 100%;
-        text-align: center;
-    }
 
-        .noPosts p {
-            margin-top: 15%;
-            font-weight: bold;
-        }
-
-    .postList {
-        display: flex;
-        flex-flow: row wrap;
-        width: 100%;
-        overflow: auto;
-        max-height: 43vh;
-    }
-
-    .postBlock {
-        display: inline-block;
-        margin-right: 2%;
-    }
-
-    .postImg {
-        width: 10vw;
-        height: 30vh;
-    }
-
-    .postText {
-        width: 10vw;
-        font-weight: bold;
-        text-align: center;
-    }
-</style>
 
 
 <hr />
@@ -110,17 +84,17 @@ else
         @foreach (var item in Model)
         {
 
-            <div class="postBlock">
-                <img data-url='@Url.Action("Details")' asp-route-id="@item.PostID" style="color: black" src="@item.PicUrls" class="postImg" />
+        <div class="postBlock">
+            <a asp-action="Details" asp-route-id="@item.PostID" style="color: black">
+                <img src="@item.PicUrls" class="postImg" />
+            </a>
 
-        
-            </div>}
+
+        </div>}
     </div>}
 
 
-<button type="button" id="createBtn" class="btn btn-primary float-lg-none circular" data-toggle="modal">
-    <i class="fas fa-plus"></i>
-</button>
+
 
 <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="deleteModal" data-url='@Url.Action("Delete")'>
     <div class="modal-dialog" role="document">

@@ -14,6 +14,23 @@
     form {
         direction: rtl;
     }
+
+    #tagsInput {
+        max-width: 98%;
+    }
+
+    #descriptionInput {
+        width: 236%;
+    }
+
+    .form-row {
+        margin-top: 3%;
+    }
+
+    .submit_btn {
+        margin-right: 85%;
+        margin-top: 1%;
+    }
 </style>
 
 <div class="header">
@@ -30,25 +47,32 @@
                     <span asp-validation-for="Product.price" class="text-danger"></span>
                 </div>
                 <div class="form-group col-md-6">
-                    <label asp-for="Product.description">תיאור </label>
-                    <textarea asp-for="Product.description" id="descriptionInput" required> </textarea>
-                    <span asp-validation-for="Product.description" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label asp-for="PicUrls"> כתובת של תמונות - הפרדה בעזרת ; </label>
+                    <label asp-for="PicUrls"> תמונה (URL) </label>
                     <input asp-for="PicUrls" type="text" class="form-control" id="picsInput" required />
                     <span asp-validation-for="PicUrls" class="text-danger"></span>
                 </div>
+
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label asp-for="Tags" class="tagsInput">תגיות  </label>
+                    @Html.DropDownList("tags", ViewData["Tags"] as List<SelectListItem>, "" , new { @class = "form-control", required = "required" })
+                </div>
+                </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="Product.description">תיאור </label>
+                    <textarea asp-for="Product.description" id="descriptionInput" type="text" class="form-control" required> </textarea>
+                    <span asp-validation-for="Product.description" class="text-danger"></span>
+                </div>
             </div>
 
 
 
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+                <div class="form-group">
+                    <input type="submit" value="יצירה" class="btn btn-primary submit_btn" />
+                </div>
+</form>
     </div>
 </div>
 

@@ -17,10 +17,15 @@
     <header>
 
         <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgba(0, 0, 0, 0.05);">
+
             <a asp-controller="Home" asp-action="Index">
                 <img src="https://assets.yad2.co.il/yad2site/y2assets/images/header/yad2Logo.png" width="100" height="59" />
 
             </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -39,7 +44,7 @@
                     @if (Context.User != null & Context.User.Claims != null & Context.User.Claims.Count() > 0 && User.FindFirst("isAdmin").Value == "True")
                     {
                         <li class="nav-item navbar-toggle">
-                        <a class="nav-link" asp-controller="Home" asp-action="Privacy">גרפים<span class="sr-only">(current)</span></a>
+                            <a class="nav-link" asp-controller="Home" asp-action="Privacy">גרפים<span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item navbar-toggle">
                             <a class="nav-link" asp-controller="Users" asp-action="Index">ניהול משתמשים<span class="sr-only">(current)</span></a>
@@ -70,7 +75,7 @@
                     <li class="nav-item navbar-toggle">
                     <li class="nav-item navbar-toggle">
                         <a class="nav-link" asp-controller="Tags" asp-action="index">תגיות<span class="sr-only">(current)</span></a>
-          
+
                 </ul>
             </div>
         </nav>

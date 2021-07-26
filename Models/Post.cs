@@ -22,16 +22,6 @@ namespace yad2.Models
         // Save the urls as a string formatted with ; as a seperator
         public string PicUrls { get; set; }
 
-        [NotMapped]
-        public string[] Pictures
-        {
-            get
-            {
-                return PicUrls.Split(';');
-            }
-            set => PicUrls = string.Join(";", value);
-        }
-
         public DateTime PublishDate { get; set; }
     }
 }
