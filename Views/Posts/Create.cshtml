@@ -1,0 +1,53 @@
+﻿@model yad2.Models.Post
+
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Create";
+}
+
+
+<div class="header">
+    <h4 class="modal-title" id="myModalLabel"> הוספת פוסט חדש</h4>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Create" asp-route-returnurl='@Context.Request.Query["ReturnUrl"]'>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label asp-for="Product.price">מחיר </label>
+                    <input asp-for="Product.price" type="number" class="form-control" id="priceInput" required />
+                    <span asp-validation-for="Product.price" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="PicUrls"> תמונה (URL) </label>
+                    <input asp-for="PicUrls" type="text" class="form-control" id="picsInput" required />
+                    <span asp-validation-for="PicUrls" class="text-danger"></span>
+                </div>
+
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label asp-for="Tags" class="tagsInput">תגיות  </label>
+                    @Html.ListBox("tagId", (MultiSelectList)ViewBag.tags, new { multiple = "multiple", @class = "form-control", required = "required" })
+
+                </div>
+                </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="Product.description">תיאור </label>
+                    <textarea asp-for="Product.description" id="descriptionInput" type="text" class="form-control" required> </textarea>
+                    <span asp-validation-for="Product.description" class="text-danger"></span>
+                </div>
+            </div>
+
+
+
+                <div class="form-group">
+                    <input type="submit" value="יצירה" class="btn btn-primary submit_btn" />
+                </div>
+</form>
+    </div>
+</div>
+

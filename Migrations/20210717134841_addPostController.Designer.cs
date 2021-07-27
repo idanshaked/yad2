@@ -3,36 +3,23 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using yad2.Data;
 
 namespace yad2.Migrations
 {
     [DbContext(typeof(yad2Context))]
-    partial class yad2ContextModelSnapshot : ModelSnapshot
+    [Migration("20210717134841_addPostController")]
+    partial class addPostController
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.8")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("PostTags", b =>
-                {
-                    b.Property<int>("PostsPostID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TagstagId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PostsPostID", "TagstagId");
-
-                    b.HasIndex("TagstagId");
-
-                    b.ToTable("PostTags");
-                });
 
             modelBuilder.Entity("yad2.Models.Post", b =>
                 {
@@ -117,6 +104,9 @@ namespace yad2.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("PostID")
+                        .HasColumnType("int");
+
                     b.Property<string>("tagIcon")
                         .HasColumnType("nvarchar(max)");
 
@@ -125,6 +115,8 @@ namespace yad2.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("tagId");
+
+                    b.HasIndex("PostID");
 
                     b.ToTable("Tags");
                 });
@@ -154,21 +146,6 @@ namespace yad2.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("PostTags", b =>
-                {
-                    b.HasOne("yad2.Models.Post", null)
-                        .WithMany()
-                        .HasForeignKey("PostsPostID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("yad2.Models.Tags", null)
-                        .WithMany()
-                        .HasForeignKey("TagstagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("yad2.Models.Post", b =>
                 {
                     b.HasOne("yad2.Models.User", "Publisher")
@@ -189,9 +166,18 @@ namespace yad2.Migrations
                     b.Navigation("Post");
                 });
 
+            modelBuilder.Entity("yad2.Models.Tags", b =>
+                {
+                    b.HasOne("yad2.Models.Post", null)
+                        .WithMany("Tags")
+                        .HasForeignKey("PostID");
+                });
+
             modelBuilder.Entity("yad2.Models.Post", b =>
                 {
                     b.Navigation("Product");
+
+                    b.Navigation("Tags");
                 });
 #pragma warning restore 612, 618
         }
