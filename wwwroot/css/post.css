@@ -108,3 +108,28 @@ td, th, col, .modal-title {
     color: #0366d6 !important;
     font-size: 20px
 }
+
+.form-group {
+    text-align: start;
+}
+
+form {
+    direction: rtl;
+}
+
+#tagsInput {
+    max-width: 98%;
+}
+
+#descriptionInput {
+    width: 236%;
+}
+
+.form-row {
+    margin-top: 3%;
+}
+
+.submit_btn {
+    margin-right: 85%;
+    margin-top: 1%;
+}
