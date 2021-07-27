@@ -50,12 +50,12 @@ namespace yad2.Controllers
 
             var tags = _context.Tags.Select(tag => new {
                 tageName = tag.tageName,
-                tagId = tag.tagId.ToString()
+                tagId = tag.tagId
             }).ToList();
 
             ViewBag.tags = new MultiSelectList(tags, "tagId", "tageName");
             return View();
-            
+
         }
 
         // POST: Posts/Create
@@ -63,7 +63,7 @@ namespace yad2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PostID,PicUrls,PublishDate")] Post post, Product product)
+        public async Task<IActionResult> Create([Bind("PostID,PicUrls,PublishDate")] Post post, Product product, int[] tagId)
         {
             if (ModelState.IsValid)
             {
