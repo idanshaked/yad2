@@ -44,6 +44,17 @@
         .tag-icon {
             font-size: 210%;
         }
+
+        .share-header {
+            font-weight: 500;
+            font-size: 125%;
+            margin-left: 1%;
+        }
+
+        .share-container {
+            align-items: center;
+            display: flex;
+        }
     </style>
 </head>
 
@@ -56,22 +67,21 @@
     <h3>תגיות מובילות</h3>
     <hr>
     <div class="recommended-tags">
-        @foreach (var tag in ViewBag.tags)
+   @*     @foreach (var tag in ViewBag.tags)
         {
             <div class="tag-item">
                 <i class="@tag.tagIcon tag-icon"></i>
                 @tag.tageName
             </div>
-        }
+        }*@
     </div>
     <h3>?מי אנחנו</h3>
     <hr>
     <iframe width="1140" height="500" src="https://www.youtube.com/embed/PZ9_OC7LQBk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     <hr />
-    @*<script type="text/javascript">
-            document.getElementById("furniture").onclick = function () {
-                location.href = "/Notices?SearchString=furniture";
-            };
-        </script>*@
+    <div class="share-container">
+        <span class="share-header">אהבתם? נשמח לשיתוף</span>
+        <iframe src="https://www.facebook.com/plugins/share_button.php?href=https%3A%2F%2Fyad-colman.herokuapp.com%2F&layout=button&size=large&width=77&height=28&appId" width="77" height="28" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+    </div>
 </body>
 </html>
