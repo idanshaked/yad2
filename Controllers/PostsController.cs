@@ -23,7 +23,16 @@ namespace yad2.Controllers
         // GET: Posts
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Posts.ToListAsync());
+            var posts = await _context.Posts.ToListAsync();
+
+            foreach( Post post in posts)
+            {
+                var product = _context.Products.Where(x => x.PostID.Equals(post.PostID)).FirstOrDefault();
+                post.Product = product;
+
+            }
+
+            return View(posts);
         }
 
         // GET: Posts/Details/5
@@ -36,6 +45,9 @@ namespace yad2.Controllers
 
             var post = await _context.Posts
                 .FirstOrDefaultAsync(m => m.PostID == id);
+
+            post.Product = _context.Products.Where(x => x.PostID.Equals(post.PostID)).FirstOrDefault();
+
             if (post == null)
             {
                 return NotFound();

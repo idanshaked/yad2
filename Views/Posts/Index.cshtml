@@ -7,7 +7,7 @@
 
 
 <head>
-    <link rel="stylesheet" href="~/css/post.css"/>
+    <link rel="stylesheet" href="~/css/post.css" />
 </head>
 
 <div style="height: 60px">
@@ -84,15 +84,17 @@ else
         @foreach (var item in Model)
         {
 
-        <div class="postBlock">
-            <a asp-action="Details" asp-route-id="@item.PostID" style="color: black">
+            <div class="postBlock">
                 <img src="@item.PicUrls" class="postImg" />
-            </a>
+
+                <div class="postText"  id="details" data-toggle="modal">
+                    <a asp-action="Details" asp-route-id="@item.PostID" style="color: black"> @item.Product.price ₪  </a>
+                </div>
 
 
-        </div>}
+
+            </div>}
     </div>}
-
 
 
 
@@ -119,8 +121,21 @@ else
     </div>
 </div>
 
+
+
+<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-url='@Url.Action("Details")'>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <button type="button" class="close" id="detailsCloseBtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <div id="detailsContent">
+            </div>
+        </div>
+
+    </div>
+</div>
+
 <script src="~/lib/jquery/dist/jquery.js"></script>
-<script src="~/js/users.js"></script>
+<script src="~/js/post.js"></script>
 <script src="~/js/Search.js"></script>
 <script>
 
@@ -163,6 +178,7 @@ else
                     row.find(".deleteBtn").show();
                     row.find(".Update").hide();
                     row.find(".cancel").hide();
+                    row.find("#DetailsModal").hide();
                     $(this).hide();
 
                     modifiedUser.isAdmin = row.find(".isAdmin").find("span").find("#realValue")[0].checked
