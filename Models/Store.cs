@@ -28,8 +28,5 @@ namespace yad2.Models
  
         public string Description { get; set; }
  
-        [NotMapped]
-        public List<String> products { get; set; }
-
     }
 }
