@@ -15,5 +15,9 @@ namespace yad2.Models
         public int PostID { get; set; }
 
         public Post Post { get; set; }
+
+        public int StoreID { get; set; }
+
+        public Store store { get; set; }
     }
 }
