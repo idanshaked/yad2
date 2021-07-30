@@ -49,6 +49,23 @@ namespace yad2.Controllers
 
             post.Product = _context.Products.Where(x => x.PostID.Equals(post.PostID)).FirstOrDefault();
 
+            var tags = _context.Posts.Select(o => new
+            {
+                o.PostID,
+                Tags = o.Tags.Select(ot => ot.tagId).ToList()
+            }).Where(a => a.PostID.Equals(id)).ToList();
+
+            var new_tags = new List<Tags>();
+            foreach (var tag_id in tags[0].Tags)
+            {
+                new_tags.Add(_context.Tags.FirstOrDefault(p => p.tagId == tag_id));
+            }
+
+            post.Tags = new_tags;
+
+
+
+
             if (post == null)
             {
                 return NotFound();
