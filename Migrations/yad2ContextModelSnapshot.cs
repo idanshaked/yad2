@@ -67,7 +67,7 @@ namespace yad2.Migrations
                     b.Property<int>("PostID")
                         .HasColumnType("int");
 
-                    b.Property<int>("StoreID")
+                    b.Property<int>("storeId")
                         .HasColumnType("int");
 
                     b.Property<string>("description")
@@ -81,7 +81,7 @@ namespace yad2.Migrations
                     b.HasIndex("PostID")
                         .IsUnique();
 
-                    b.HasIndex("StoreID");
+                    b.HasIndex("storeId");
 
                     b.ToTable("Products");
                 });
@@ -193,7 +193,7 @@ namespace yad2.Migrations
 
                     b.HasOne("yad2.Models.Store", "store")
                         .WithMany()
-                        .HasForeignKey("StoreID")
+                        .HasForeignKey("storeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

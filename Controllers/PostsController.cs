@@ -53,8 +53,13 @@ namespace yad2.Controllers
                 tageName = tag.tageName,
                 tagId = tag.tagId.ToString()
             }).ToList();
+            var stores = _context.Store.Select(store => new {
+                storeName = store.storeName,
+                storeId = store.storeId.ToString()
+            }).ToList();
 
             ViewBag.tags = new MultiSelectList(tags, "tagId", "tageName");
+            ViewBag.stores = new MultiSelectList(stores, "storeId", "storeName");
             return View();
             
         }

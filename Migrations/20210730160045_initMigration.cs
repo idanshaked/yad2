@@ -107,7 +107,7 @@ namespace yad2.Migrations
                     description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     price = table.Column<int>(type: "int", nullable: false),
                     PostID = table.Column<int>(type: "int", nullable: false),
-                    StoreID = table.Column<int>(type: "int", nullable: false)
+                    storeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -119,8 +119,8 @@ namespace yad2.Migrations
                         principalColumn: "PostID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Products_Store_StoreID",
-                        column: x => x.StoreID,
+                        name: "FK_Products_Store_storeId",
+                        column: x => x.storeId,
                         principalTable: "Store",
                         principalColumn: "storeId",
                         onDelete: ReferentialAction.Cascade);
@@ -143,9 +143,9 @@ namespace yad2.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_StoreID",
+                name: "IX_Products_storeId",
                 table: "Products",
-                column: "StoreID");
+                column: "dtoreId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
