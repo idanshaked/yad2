@@ -67,6 +67,9 @@ namespace yad2.Migrations
                     b.Property<int>("PostID")
                         .HasColumnType("int");
 
+                    b.Property<int>("StoreID")
+                        .HasColumnType("int");
+
                     b.Property<string>("description")
                         .HasColumnType("nvarchar(max)");
 
@@ -77,6 +80,8 @@ namespace yad2.Migrations
 
                     b.HasIndex("PostID")
                         .IsUnique();
+
+                    b.HasIndex("StoreID");
 
                     b.ToTable("Products");
                 });
@@ -186,7 +191,15 @@ namespace yad2.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("yad2.Models.Store", "store")
+                        .WithMany()
+                        .HasForeignKey("StoreID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Post");
+
+                    b.Navigation("store");
                 });
 
             modelBuilder.Entity("yad2.Models.Post", b =>

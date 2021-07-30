@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using yad2.Data;
 using yad2.Models;
 using System.Security.Claims;
+using System.IO;
 
 namespace yad2.Controllers
 {
@@ -63,7 +64,7 @@ namespace yad2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PostID,PicUrls,PublishDate")] Post post, Product product)
+        public async Task<IActionResult> Create([Bind("PostID,PicUrls,PublishDate")] Post post, Product product, int[] tagsIds)
         {
             if (ModelState.IsValid)
             {
@@ -72,8 +73,19 @@ namespace yad2.Controllers
                 post.Product = product;
                 post.PublishDate = DateTime.Now;
                 post.PicUrls = post.PicUrls;
+                post.Tags = new List<Tags>();
+                foreach (var id in tagsIds)
+                {
+                    post.Tags.Add(_context.Tags.FirstOrDefault(p => p.tagId == id));
+                }
 
-                _context.Add(post);
+                _context.Posts.Add(new Post { 
+                    PublishDate = post.PublishDate,
+                    Product = product,
+                    Publisher = _context.User.Where(x => x.Username.Equals(username)).FirstOrDefault(),
+                    PicUrls = post.PicUrls,
+                    Tags = post.Tags
+                }); 
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
