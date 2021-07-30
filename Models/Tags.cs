@@ -17,6 +17,6 @@ namespace yad2.Models
 
         public String tagIcon { get; set; }
 
-        public List<Post> Posts { get; set; }
+        public ICollection<Post> Posts { get; set; }
     }
 }
