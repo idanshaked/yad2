@@ -19,7 +19,6 @@ namespace yad2.Models
         [Required(ErrorMessage = "please enter the store lat")]
         public double lat { get; set; }
 
-
         [Required(ErrorMessage = "please enter the store lng")]
         public double lng { get; set; }
 
@@ -27,9 +26,5 @@ namespace yad2.Models
         public string address { get; set; }
  
         public string Description { get; set; }
- 
-        [NotMapped]
-        public List<String> products { get; set; }
-
     }
 }

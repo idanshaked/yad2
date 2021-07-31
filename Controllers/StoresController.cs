@@ -156,5 +156,12 @@ namespace yad2.Controllers
         {
             return _context.Store.Any(e => e.storeId == id);
         }
+        public async Task<IActionResult> Search(String storeName)
+        {
+            var result = _context.Store.AsQueryable();
+            if (!String.IsNullOrWhiteSpace(storeName))
+                result = result.Where(x => x.storeName.Contains(storeName));
+            return Json(result);
+        }
     }
 }

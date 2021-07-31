@@ -4,56 +4,357 @@
     ViewData["Title"] = "סניפים";
 }
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
 <script src="~/js/store.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+
+            $(".table").on("submit", 'form', function (event) {
+                event.preventDefault();
+                var row = $(this).closest("tr");
+                var modifiedStore = {};
+                modifiedStore.storeName = row.find(".storeName").find("input").val();
+                modifiedStore.address = row.find(".address").find("input").val();
+                modifiedStore.Description = row.find(".Description").find("input").val();
+                const validationMessages = validateStore(modifiedStore);
+                if (validationMessages.length == 0) {
+                    $("td", row).each(function () {
+                        if ($(this).find("input").length > 0) {
+                            var span = $(this).find("span");
+                            var input = $(this).find("input");
+                            span.show();
+                            input.hide();
+                        }
+                    });
+                    row.find(".Edit").show();
+                    row.find(".deleteBtn").show();
+                    row.find(".Update").hide();
+                    row.find(".cancel").hide();
+                    $(this).hide();
+
+                    var token = '@Html.AntiForgeryToken()';
+                    token = $(token).val();
+                    modifiedStore.__requestverificationtoken = token;
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/Store/Edit/5",
+                        dataType: "JSON",
+                        data: modifiedStore
+                    })
+                } else {
+                    validationMessages.forEach(field => {
+                        let inputField = row.find(`.` + field + ' input');
+                        inputField.addClass('has-error')
+                    })
+                }
+                return false;
+            });
+    })
+
+    const validateStore = (user) => {
+        const { storeName, address, Description } = store;
+        const invalidFields = []
+        if (!storeName) {
+            invalidFields.push("storeName")
+        }
+        if (!address) {
+            invalidFields.push("address")
+        }
+        if (!Description) {
+            invalidFields.push("Description")
+        }
+        return invalidFields;
+    }
+
+
+    const getSearchedStores = function (fields) {
+        return new Promise(resolve => {
+            $.ajax({
+                type: "GET",
+                url: "/Stores/Search/",
+                data: fields,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (users) {
+                    resolve(users)
+                }
+            });
+        })
+    }
+    const searchStores = () => {
+        const searchFields = {
+            storename: $("#storenameSearch").val()
+        }
+
+        getSearchedStores(searchFields).then(function (stores) {
+            $("#storesTableBody").html('');
+            stores.forEach(store => {
+                console.log(store);
+                const storeData =
+                    " <tr>" + 
+                    "<td class='storeName'>" +
+                    "<span data-val='" + store.storeName + "'>" +
+                    store.storeName +
+                    "</span>" +
+                    "<input form='editForm_" + store.storeName + "' value='" + store.storeName + "' name='storenameEdit' class='form-control' style='display:none' required />" +
+                    "</td>" +
+                    "<td class='address form-group'>" +
+                    "<span data-val='" + store.address + "'> " +
+                    store.address +
+                    "</span>" +
+                    "<input form='editForm_" + store.storeName + "' value='" + store.address + "' name='addressEdit' class='form-control' style='display:none' required />" +
+                    "</td>" +
+                    "<td class='Description'>" +
+                    "<span data-val='" + store.description + "'>" +
+                    store.description +
+                    "</span>" +
+                    "<input form='editForm_" + store.description + "' value='" + store.description + "' name='descriptionEdit' class='form-control' style='display:none' required />" +
+                    "</td>" +
+                    "<td>" +
+                    "<div class='container'>" +
+                        "<a class='Edit'><i class='fas fa-pencil-alt'></i></a>"+
+                        "<a class='fas fa-user-times deleteBtn' data-toggle='modal' data-store='" + store.storeName +"'> </a>" +
+                        "<a class='cancel fas fa-undo' style='display:none' data-store='" + store.storeName +"'> </a>" +
+                        "<button form='editForm_" + store.storeName + "' type='submit' class='Update fas fa-save' style='display:none' data-store='" + store.storeName + "'></button>" +
+                        "</div> </td> <td> <form id='editForm_" + store.storeName +"'/> </td> </tr>"
+                $("#storesTableBody").append(storeData);
+            })
+        })
+    }
+
+    $('#createBtn').click(function () {
+        var url = $('#createModal').data('url');
+
+        $.get(url, function (data) {
+            $('#createContent').html(data);
+
+            $('#createModal').modal('show');
+        });
+    });
+
+    $(".table").on('click', '.deleteBtn', function (event) {
+        var url = $('#deleteModal').data('url');
+        $.ajax({
+            url: url,
+            type: 'get',
+            data: {
+                id: event.target.dataset.user
+            },
+            success: function (data) {
+                $('#deleteContent').html(data);
+
+                $('#deleteModal').modal('show');
+            }
+        });
+    })
+
+    $(".table").on("click", ".Edit", function () {
+        var row = $(this).closest("tr");
+        $("td", row).each(function () {
+            if ($(this).find("input").length > 0) {
+                if (!$(this).hasClass("username")) {
+                    $(this).find("input").show();
+                    $(this).find("span").hide();
+                }
+            }
+        });
+        row.find(".Update").show();
+        row.find(".cancel").show();
+        row.find(".deleteBtn").hide();
+        $(this).hide();
+    });
+
+    $(".table").on("click", ".cancel", function () {
+        var row = $(this).closest("tr");
+        $("td", row).each(function () {
+            if ($(this).find("input").length > 0) {
+                var span = $(this).find("span");
+                var input = $(this).find("input");
+                if ($(this).hasClass('isAdmin')) {
+                    input = $(this).find('#editable')
+                    if (!span.find("#realValue")[0].checked) {
+                        $(this).find("#editable").prop('checked', false)
+                    } else {
+                        $(this).find("#editable").prop('checked', true)
+                    }
+                } else {
+                    input.val(span.data('val'));
+                }
+                input.hide();
+                span.show();
+            }
+        });
+        row.find(".Edit").show();
+        row.find(".deleteBtn").show();
+        row.find(".Update").hide();
+        $(this).hide();
+    });
+</script>
+
+<script>
+    function loadMap() {
+        const map = new Microsoft.Maps.Map(document.getElementById('map'), {
+            credentials: 'ApuCycJr1Nj2E8XCyNgrPLfogKZjB7vguFf3VTXFjqgR9pcvU_8GWQLs5OReJuE6',
+        });
+        map.setView({
+            mapTypeId: Microsoft.Maps.MapTypeId.road,
+            center: new Microsoft.Maps.Location(32.100000, 34.788052),
+            zoom: 10
+        });
+
+        $.ajax({
+            type: 'GET',
+            url: '/stores/All',
+            async: true,
+            success: function (stores) {
+                stores.forEach(store => addLocationToMap(map, store));
+            },
+            error: function (response) {
+                alert("Error on getting all locations");
+                console.log(response);
+            }
+        });
+    }
+
+    const addLocationToMap = (map, store) => {
+        const pushPin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(store.lat, store.lng), { color: 'blue' });
+        pushPin.setOptions({ enableHoverStyle: true });
+        pushPin.metadata = {
+            id: store.storeId,
+            title: store.storeName,
+            description: store.description,
+            address: store.address
+        };
+
+        map.entities.push(pushPin);
+
+        const infoboxTemplate = '<div class="customInfobox" style="background-color:lightgray;":relative;"><div>{title}</div><br>{description}<br>{address}</div>  ';
+
+        const infobox = new Microsoft.Maps.Infobox(pushPin.getLocation(), {
+            visible: false
+        });
+
+        infobox.setMap(map);
+
+        const showInfobox = e => {
+            if (e.target.metadata) {
+                infobox.setOptions({
+                    location: e.target.getLocation(),
+                    htmlContent: infoboxTemplate.replace('{title}', e.target.metadata.title).replace('{description}', e.target.metadata.description).replace('{address}', e.target.metadata.address),
+                    visible: true
+                });
+            }
+        }
+        const hideInfobox = e => {
+            infobox.setOptions({ visible: false });
+        }
+        Microsoft.Maps.Events.addHandler(pushPin, 'mouseout', hideInfobox);
+        Microsoft.Maps.Events.addHandler(pushPin, 'click', showInfobox);
+    };
+
+</script>
 <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?branch=release&callback=loadMap' async defer></script>
 
-<div style="text-align:right;">
+<div style="height: 60px">
+    <h1 class="title">מקומות האיסוף שלנו</h1>
+</div>
+<div class="mapPageWrapper">
+    <div id="map" style="width:800px;height:350px;"></div>
+</div>
+<div style="width: 100%; margin-top: 20px;">
+    <div style="height: 36px;">
+        <h5 style="float: right; margin-left: 15px;">חיפוש בסיסי </h5>
+        <input type="text" id="storenameSearch" style="float: right;" />
+    </div>
     <div>
-        <h1>מקומות האיסוף שלנו</h1>
+        <button onclick="searchStores()"> חפש </button>
     </div>
-    <br />
-    <div class="mapPageWrapper">
-        <div id="map" style="width:800px;height:350px;"></div>
-    </div>
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
-    <table class="table">
-        <thead>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                מקום איסוף
+            </th>
+            <th>
+                כתובת
+            </th>
+            <th>
+                תיאור
+            </th>
+            <th id="actions" />
+        </tr>
+    </thead>
+    <tbody id="storesTableBody">
+        @foreach (var store in Model)
+        {
             <tr>
-                <th>
-                    מקום האיסוף
-                </th>
-                <th>
-                    כתובת
-                </th>
-                <th>
-                    תיאור
-                </th>
-                <th></th>
+                <td class="storeName">
+                    <span data-val="@store.storeName">
+                        @Html.DisplayFor(modelItem => store.storeName)
+                    </span>
+                    <input form="editForm_@store.storeName" value="@store.storeName" name="storenameEdit" class="form-control" style="display:none" required />
+                </td>
+                <td class="address">
+                    <span data-val="@store.address">
+                        @Html.DisplayFor(modelItem => store.address)
+                    </span>
+                    <input form="editForm_@store.address" value="@store.address" name="addressEdit" class="form-control " style="display:none" required />
+                </td>
+                <td class="Description">
+                    <span data-val="@store.Description">
+                        @Html.DisplayFor(modelItem => store.Description)
+                    </span>
+                    <input form="editForm_@store.Description" value="@store.Description" name="descriptionEdit" class="form-control" style="display:none" required />
+                </td>
+
+                <td>
+                    <div class="container">
+                        <a class="Edit link-button "><i class="fas fa-pencil-alt"></i></a>
+                        <a class="fas fa-user-times deleteBtn link-button " data-toggle="modal" data-store="@store.storeName">
+                        </a>
+                        <a class="cancel fas fa-undo link-button " style="display:none" data-store="@store.storeName">
+                        </a>
+                        <button form="editForm_@store.storeName" type="submit" class="Update fas fa-save" style="display:none" data-store="@store.storeName">
+                        </button>
+                    </div>
+                </td>
+                <td>
+                    <form id="editForm_@store.storeName" />
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.storeName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.address)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.storeId">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.storeId">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.storeId">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+        }
+    </tbody>
+</table>
+
+<button type="button" id="createBtn" class="btn btn-primary float-lg-none circular" data-toggle="modal">
+    <i class="fas fa-plus"></i>
+</button>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="deleteModal" data-url='@Url.Action("Delete")'>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close closeBtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">שים לב!</h4>
+            </div>
+            <div id="deleteContent"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-url='@Url.Action("Create")'>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <button type="button" class="close" id="createCloseBtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <div id="createContent">
+            </div>
+        </div>
+    </div>
 </div>
