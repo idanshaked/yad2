@@ -13,13 +13,22 @@
     return invalidFields;
 }
 
-$('#details').click(function () {
-    var url = $('#detailsModal').data('url');
+$('.details').click(function (e) {
+    debugger
+    const postId = e.target.dataset.postid;
+    var url = e.target.dataset.url;
 
-    $.get(url, function (data) {
-        $('#detailsContent').html(data);
+    $.ajax({
+        url: url,
+        type: 'get',
+        data: {
+            id: postId
+        },
+        success: function (data) {
+            $('#detailsContent').html(data);
 
-        $('#detailsModal').modal('show');
+            $('#detailsModal').modal('show');
+        }
     });
 });
 

@@ -9,6 +9,7 @@ using yad2.Data;
 using yad2.Models;
 using System.Security.Claims;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace yad2.Controllers
 {
@@ -45,27 +46,10 @@ namespace yad2.Controllers
             }
 
             var post = await _context.Posts
-                .FirstOrDefaultAsync(m => m.PostID == id);
-
-            post.Product = _context.Products.Where(x => x.PostID.Equals(post.PostID)).FirstOrDefault();
-
-            var tags = _context.Posts.Select(o => new
-            {
-                o.PostID,
-                Tags = o.Tags.Select(ot => ot.tagId).ToList()
-            }).Where(a => a.PostID.Equals(id)).ToList();
-
-            var new_tags = new List<Tags>();
-            foreach (var tag_id in tags[0].Tags)
-            {
-                new_tags.Add(_context.Tags.FirstOrDefault(p => p.tagId == tag_id));
-            }
-
-            post.Tags = new_tags;
-
-
-
-
+               .Include(a => a.Tags).Include(a => a.Product).ThenInclude(p => p.store).Include(a => a.Publisher)
+               .FirstOrDefaultAsync(m => m.PostID == id);
+            ViewBag.Tags = post.Tags;
+            
             if (post == null)
             {
                 return NotFound();
