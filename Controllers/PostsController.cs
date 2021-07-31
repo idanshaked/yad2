@@ -9,6 +9,7 @@ using yad2.Data;
 using yad2.Models;
 using System.Security.Claims;
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace yad2.Controllers
 {
@@ -22,18 +23,39 @@ namespace yad2.Controllers
         }
 
         // GET: Posts
+        [Authorize]
         public async Task<IActionResult> Index()
         {
-            var posts = await _context.Posts.ToListAsync();
 
-            foreach( Post post in posts)
+            string username = ((ClaimsIdentity)User.Identity).Name;
+            if (!String.IsNullOrEmpty(username))
             {
-                var product = _context.Products.Where(x => x.PostID.Equals(post.PostID)).FirstOrDefault();
-                post.Product = product;
+                var users = from u in _context.User
+                            where u.Username == username && u.isAdmin
+                            select u;
+                if (users.Count() == 0)
+                {
+                    return RedirectToAction(nameof(UsersController.AccessDenied), "Users");
+                }
+                else
+                {
+                    var posts = await _context.Posts.ToListAsync();
 
+                    foreach (Post post in posts)
+                    {
+                        var product = _context.Products.Where(x => x.PostID.Equals(post.PostID)).FirstOrDefault();
+                        post.Product = product;
+
+                    }
+
+                    return View(posts);
+                }
             }
-
-            return View(posts);
+            else
+            {
+                return RedirectToAction(nameof(UsersController.AccessDenied), "Users");
+            }
+           
         }
 
         // GET: Posts/Details/5
