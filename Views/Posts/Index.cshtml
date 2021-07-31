@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<yad2.Models.Post>
 
 @{
-    ViewData["Title"] = "מוצרים";
+    ViewData["Title"] = "פוסטים";
 }
 
 
@@ -11,7 +11,7 @@
 </head>
 
 <div style="height: 60px">
-    <h1 class="title">מוצרים</h1>
+    <h1 class="title">פוסטים</h1>
 </div>
 <div style="width:100%">
     <div class="search_navbar">
@@ -87,8 +87,8 @@ else
             <div class="postBlock">
                 <img src="@item.PicUrls" class="postImg" />
 
-                <div class="postText"  id="details" data-toggle="modal">
-                    <a asp-action="Details" asp-route-id="@item.PostID" style="color: black"> @item.Product.price ₪  </a>
+                <div class="postText" id="details" data-toggle="modal">
+                    <a asp-action="Details" asp-route-id="@item.PostID" style="color: black" id="details" data-toggle="modal"> @item.Product.price ₪  </a>
                 </div>
 
 

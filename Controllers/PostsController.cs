@@ -64,8 +64,6 @@ namespace yad2.Controllers
             post.Tags = new_tags;
 
 
-
-
             if (post == null)
             {
                 return NotFound();
