@@ -39,10 +39,13 @@
                     </li>
 
                     <li class="nav-item navbar-toggle">
-                        <a class="nav-link" asp-controller="Posts" asp-action="Index">מוצרים <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" asp-controller="Posts" asp-action="Index">פוסטים <span class="sr-only">(current)</span></a>
                     </li>
-                    @if (Context.User != null & Context.User.Claims != null & Context.User.Claims.Count() > 0 && User.FindFirst("isAdmin").Value == "True")
-                    {
+                    <li class="nav-item navbar-toggle">
+                        <a class="nav-link" asp-controller="Tags" asp-action="index">תגיות<span class="sr-only">(current)</span></a>
+                    </li>
+                        @if (Context.User != null & Context.User.Claims != null & Context.User.Claims.Count() > 0 && User.FindFirst("isAdmin").Value == "True")
+                        {
                         <li class="nav-item navbar-toggle">
                             <a class="nav-link" asp-controller="Home" asp-action="Privacy">גרפים<span class="sr-only">(current)</span></a>
                         </li>
@@ -52,31 +55,29 @@
                     }
 
 
-                    @if (Context.User != null & Context.User.Claims != null & Context.User.Claims.Count() > 0)
-                    {
-                        <li>
-                            <div class="user"> היי , @Context.User.Identity.Name</div>
-                        </li>
-                        <li class="nav-item navbar-toggle">
-                            <a asp-controller="Users" asp-action="Logout">
-                                <button class="btn btn-m btn-outline-secondary login" type="submit"><i class="fa fa-sign-in"></i> התנתק</button>
-                            </a>
-                        </li>
-                    }
-                    else
-                    {
-                        <li class="nav-item navbar-toggle">
-                            <a asp-controller="Users" asp-action="Login">
-                                <button class="btn btn-m btn-outline-secondary login" type="submit"><i class="fa fa-sign-in"></i> התחבר</button>
-                            </a>
-                        </li>
-                    }
+                        @if (Context.User != null & Context.User.Claims != null & Context.User.Claims.Count() > 0)
+                        {
+                            <li>
+                                <div class="user"> היי , @Context.User.Identity.Name</div>
+                            </li>
+                            <li class="nav-item navbar-toggle">
+                                <a asp-controller="Users" asp-action="Logout">
+                                    <button class="btn btn-m btn-outline-secondary login" type="submit"><i class="fa fa-sign-in"></i> התנתק</button>
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item navbar-toggle">
+                                <a asp-controller="Users" asp-action="Login">
+                                    <button class="btn btn-m btn-outline-secondary login" type="submit"><i class="fa fa-sign-in"></i> התחבר</button>
+                                </a>
+                            </li>
+                        }
 
-                    <li class="nav-item navbar-toggle">
-                    <li class="nav-item navbar-toggle">
-                        <a class="nav-link" asp-controller="Tags" asp-action="index">תגיות<span class="sr-only">(current)</span></a>
+   
 
-                </ul>
+                    </ul>
             </div>
         </nav>
     </header>

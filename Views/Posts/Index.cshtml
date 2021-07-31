@@ -1,7 +1,7 @@
-﻿@model IEnumerable<yad2.Models.Post>
+﻿@model IEnumerable<yad2.Models.Post>;
 
 @{
-    ViewData["Title"] = "מוצרים";
+    ViewData["Title"] = "פוסטים";
 }
 
 <head>
@@ -9,7 +9,7 @@
 </head>
 
 <div style="height: 60px">
-    <h1 class="title">מוצרים</h1>
+    <h1 class="title">פוסטים</h1>
 </div>
 <div style="width:100%">
     <div class="search_navbar">
@@ -79,7 +79,6 @@ else
 
             <div class="postBlock">
                 <img src="@item.PicUrls" class="postImg" />
-
                 <div class="postText" data-toggle="modal">
                     <div> @item.Product.price  ₪  </div>
                     <button class="details" data-postId="@item.PostID" style="color: black" data-url='@Url.Action("Details")'> לפרטים נוספים </button>
