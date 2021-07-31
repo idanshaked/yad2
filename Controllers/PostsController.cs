@@ -46,7 +46,20 @@ namespace yad2.Controllers
             }
 
             var post = await _context.Posts
-               .Include(a => a.Tags).Include(a => a.Product).ThenInclude(p => p.store).Include(a => a.Publisher)
+               .Include(a => a.Tags).Include(a => a.Product).ThenInclude(p => p.store).Include(a => a.Publisher).Select( p=> new Post
+               {
+                   PostID = p.PostID,
+                   PublishDate = p.PublishDate,
+                   PicUrls = p.PicUrls,
+                   Tags = p.Tags,
+                   Publisher = new User
+                   {
+                       Username = p.Publisher.Username,
+                       Phone = p.Publisher.Phone,
+                       Email = p.Publisher.Email
+                   },
+                   Product = p.Product
+               })
                .FirstOrDefaultAsync(m => m.PostID == id);
             ViewBag.Tags = post.Tags;
             
@@ -66,8 +79,13 @@ namespace yad2.Controllers
                 tageName = tag.tageName,
                 tagId = tag.tagId
             }).ToList();
+            var stores = _context.Store.Select(store => new {
+                storeName = store.storeName,
+                storeId = store.storeId.ToString()
+            }).ToList();
 
             ViewBag.tags = new MultiSelectList(tags, "tagId", "tageName");
+            ViewBag.stores = new MultiSelectList(stores, "storeId", "storeName");
             return View();
 
         }

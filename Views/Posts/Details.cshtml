@@ -88,7 +88,7 @@
             <h5 class="card-title"> @Html.DisplayFor(model => model.Product.description) </h5>
             <h6 class="card-title"> @Html.DisplayFor(model => model.PublishDate) </h6>
             <h6 class="card-title"> @Html.DisplayFor(model => model.Product.price) ש"ח </h6>
-            <div style="height:12vh">
+            <div style="height:5vh">
                 <span style="float:right"> <h6> נמצא בחנות: </h6> </span>
                 <span class="publisherDetails"> @Html.DisplayFor(Model => Model.Product.store.storeName)</span>
                 <span class="publisherDetails"> @Html.DisplayFor(Model => Model.Product.store.address)</span>
@@ -114,34 +114,3 @@
         </div>
     </div>
 </body>
-
-@*<div>
-    <h4>Post</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PicUrls)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PicUrls)
-            </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PublishDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PublishDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Product.price)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Product.price)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Publisher)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Publisher)
-        </dd>
-        </dl>
-    </div>*@
