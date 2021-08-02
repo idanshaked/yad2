@@ -22,5 +22,16 @@ namespace yad2.Controllers
         {
             return Json("[300, 500, 100]");
         }
+
+        [HttpGet]
+        public JsonResult PostsByDate()
+        {
+            //return Json("[{'amount':300,'date':'01/08/21'},{'amount':300,'date':'01/08/21'}]");
+            return Json(new[] {
+                new { amount = 15, date = "29/07/21" },
+                new { amount = 300, date = "01/08/21" }, 
+                new { amount = 100, date = "02/08/21" } 
+            });
+        }
     }
 }

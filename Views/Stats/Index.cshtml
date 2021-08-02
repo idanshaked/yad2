@@ -7,43 +7,25 @@
 
 <head>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.3.2/dist/chart.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
 </head>
 <h1 class="title">סטטיסטיקות</h1>
 
 <div class="chart-row">
-    <div class="single-chart">
+    <div class="single-chart-bars">
         <h3>
-            פילוח תגיות
+            מודעות בתאריך
         </h3>
         <div class="chart-container">
             <canvas id="myChart"></canvas>
         </div>
     </div>
-    <div class="single-chart">
+    <div class="single-chart-pie">
         <h3>
             פילוח תגיות
         </h3>
         <div class="chart-container">
             <canvas id="myChart2"></canvas>
-        </div>
-    </div>
-</div>
-
-<div class="chart-row">
-    <div class="single-chart">
-        <h3>
-            פילוח תגיות
-        </h3>
-        <div class="chart-container">
-            <canvas id="myChart3"></canvas>
-        </div>
-    </div>
-    <div class="single-chart">
-        <h3>
-            פילוח תגיות
-        </h3>
-        <div class="chart-container">
-            <canvas id="myChart4"></canvas>
         </div>
     </div>
 </div>
@@ -57,9 +39,14 @@
     .chart-container {
     }
 
-    .single-chart {
+    .single-chart-pie {
         text-align:center;
         width: 30%;
+    }
+
+    .single-chart-bars {
+        text-align: center;
+        width: 50%;
     }
 
     .chart-row {
@@ -90,6 +77,52 @@
             }]
         };
 
+        const postsData = {
+            labels: [],
+            datasets: [
+                {
+                    label: 'כמות מודעות',
+                    data: [],
+                    borderColor: "#ffff",
+                    backgroundColor: "#C70039",
+                }]
+        }
+        const postsPerDayConf = {
+            type: 'bar',
+            data: postsData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: false,
+                        text: ''
+                    }
+                }
+            },
+        };
+
+
+        // Get amout of posts per day
+        $.ajax({
+            url: '/Stats/PostsByDate',
+            type: 'get',
+            success: function (data) {
+                console.log(data)
+                postsData.datasets[0].data = data.map(item => item.amount);
+                postsData.labels = data.map(item => item.date);
+                const myChart = new Chart(
+                    document.getElementById('myChart'),
+                    postsPerDayConf
+                );
+            
+            }
+        });
+
+
+
         // Get amount of posts grouped by its tags
         $.ajax({
             url: '/Stats/PostsGroupByTags',
@@ -98,18 +131,7 @@
                 console.log("sarted");
                 postsByTagsData.datasets[0].data = JSON.parse(data);
                 const config = { type: 'pie', data:postsByTagsData, options: {} };
-                const myChart = new Chart(
-                    document.getElementById('myChart'),
-                    config
-                );
-                const myChart3 = new Chart(
-                    document.getElementById('myChart3'),
-                    config
-                );
-                const myChart4 = new Chart(
-                    document.getElementById('myChart4'),
-                    config
-                );
+               
                 const myChart2 = new Chart(
                     document.getElementById('myChart2'),
                     config
@@ -117,5 +139,4 @@
             }
         });
     });
-
 </script>
