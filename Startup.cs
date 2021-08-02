@@ -10,6 +10,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using yad2.Data;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Authorization;
+using System.Net;
 
 namespace yad2
 {
@@ -27,11 +33,26 @@ namespace yad2
         {
             services.AddControllersWithViews();
 
-            services.AddDbContext<yad2Context>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("yad2Context")));
+            services.AddDbContext<yad2Context>(options => options.UseSqlServer(Configuration.GetConnectionString("yad2Context")));
 
-            /*services.AddDbContext<yad2Context>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("yad2Context")));*/
+            services.AddSession(options => options.IdleTimeout = TimeSpan.FromHours(3));
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+            {
+                options.LoginPath = "/Users/Login";
+                options.LogoutPath = "/Users/Logout";
+                options.AccessDeniedPath = "/Users/AccessDenied";
+            });
+
+            services.AddRazorPages(options =>
+            {
+                options.Conventions.AuthorizeFolder("/Home");
+                options.Conventions.AuthorizeFolder("/Privacy");
+                options.Conventions.AuthorizeFolder("/Users");
+                options.Conventions.AllowAnonymousToPage("/Login");
+                options.Conventions.AllowAnonymousToPage("/Create");
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,7 +73,13 @@ namespace yad2
 
             app.UseRouting();
 
+            app.UseSession();
+
+
+            app.UseAuthentication();
             app.UseAuthorization();
+           
+
 
             app.UseEndpoints(endpoints =>
             {

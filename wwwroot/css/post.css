@@ -1,4 +1,43 @@
-﻿.title {
+﻿.noPosts {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+    .noPosts p {
+        margin-top: 15%;
+        font-weight: bold;
+    }
+
+.postList {
+    display: flex;
+    flex-flow: row wrap;
+    width: 100%;
+    overflow: auto;
+    max-height: 43vh;
+}
+
+.postBlock {
+    display: inline-block;
+    margin-right: 2%;
+}
+
+.postImg {
+    width: 15vw;
+    height: 30vh;
+}
+
+.postText {
+    width: 10vw;
+    font-weight: bold;
+    text-align: center;
+}
+
+.search_navbar {
+    margin-top: 1%;
+}
+
+.title {
     float: right;
 }
 
@@ -70,3 +109,27 @@ td, th, col, .modal-title {
     font-size: 20px
 }
 
+.form-group {
+    text-align: start;
+}
+
+form {
+    direction: rtl;
+}
+
+#tagsInput {
+    max-width: 98%;
+}
+
+#descriptionInput {
+    width: 236%;
+}
+
+.form-row {
+    margin-top: 3%;
+}
+
+.submit_btn {
+    margin-right: 85%;
+    margin-top: 1%;
+}

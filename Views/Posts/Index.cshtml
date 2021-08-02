@@ -1,23 +1,33 @@
-﻿@model IEnumerable<yad2.Models.User>
+﻿@model IEnumerable<yad2.Models.Post>
+
 @{
-    ViewData["Title"] = "טבלת משתמשים";
+    ViewData["Title"] = "מוצרים";
 }
 
+
+
 <head>
-    
-    <link rel="stylesheet" href="~/css/usersTable.css" />
+    <link rel="stylesheet" href="~/css/post.css"/>
 </head>
 
 <div style="height: 60px">
-    <h1 class="title">טבלת משתמשים</h1>
+    <h1 class="title">מוצרים</h1>
 </div>
 <div style="width:100%">
-    <div style="height: 36px;">
-        <h5 style="float: right; margin-left: 15px;">חיפוש בסיסי </h5>
-        <input type="text" id="generalSearch" style="float: right;" />
+    <div class="search_navbar">
+        <button type="button" id="createBtn" class="btn btn-primary float-lg-none circular" data-toggle="modal">
+            <i class="fas fa-plus"></i>
+        </button>
+
+
+        <span style="height: 36px;">
+
+            <h5 style="float: right; margin-left: 15px;">חיפוש בסיסי </h5>
+            <input type="text" id="generalSearch" style="float: right;" />
+        </span>
     </div>
 
-    <div class="accordion" style="height:auto" id="category-accordion">
+    <div class="accordion search_navbar" style="height:auto" id="category-accordion">
         <div class="card">
             <div class="card-header" data-toggle="collapse" data-target="#category-1">
                 <h5 class="mb-0" style="text-align:right">
@@ -59,83 +69,32 @@
     </div>
 </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                שם משתמש
-            </th>
-            <th>
-                סיסמא
-            </th>
-            <th>
-                אי-מייל
-            </th>
-            <th>
-                מספר טלפון
-            </th>
-            <th>
-                האם מנהל
-            </th>
-            <th id="actions" />
-        </tr>
-    </thead>
-    <tbody id="usersTableBody">
+
+
+
+<hr />
+@if (Model.Count() == 0)
+{
+    <div class="noPosts">
+        <p> הוסף את הפוסט הראשון שלך</p>
+    </div> }
+else
+{
+    <div class="postList">
         @foreach (var item in Model)
         {
-            <tr>
-                <td class="username">
-                    <span data-val="@item.Username">
-                        @Html.DisplayFor(modelItem => item.Username)
-                    </span>
-                    <input form="editForm_@item.Username" value="@item.Username" name="usernameEdit" class="form-control" style="display:none" required />
-                </td>
-                <td class="password form-group">
-                    <span data-val="@item.Password">
-                        @Html.DisplayFor(modelItem => item.Password)
-                    </span>
-                    <input form="editForm_@item.Username" value="@item.Password" name="passEdit" class="form-control " style="display:none" required />
-                </td>
-                <td class="mail">
-                    <span data-val="@item.Email">
-                        @Html.DisplayFor(modelItem => item.Email)
-                    </span>
-                    <input form="editForm_@item.Username" name="mailEdit" value="@item.Email" class="form-control" style="display:none" required />
-                </td>
-                <td class="phone">
-                    <span data-val="@item.Phone">
-                        @Html.DisplayFor(modelItem => item.Phone)
-                    </span>
-                        <input form="editForm_@item.Username" name="phoneEdit" pattern="05[0-9]{8}" value="@item.Phone" class="form-control" style="display:none" required />
-                </td>
-                <td class="isAdmin">
-                        <span>
-                            <input type="checkbox" disabled id="realValue" checked="@item.isAdmin" />
-                        </span>
-                        <input form="editForm_@item.Username"  type="checkbox" id="editable" checked="@item.isAdmin" style="display:none" />
-                </td>
-                <td>
-                    <div class="container">
-                        <a class="Edit link-button "><i class="fas fa-pencil-alt"></i></a>
-                        <a class="fas fa-user-times deleteBtn link-button " data-toggle="modal" data-user="@item.Username">
-                        </a>
-                        <a class="cancel fas fa-undo link-button " style="display:none" data-user="@item.Username">
-                        </a>
-                            <button form="editForm_@item.Username" type="submit" class="Update fas fa-save" style="display:none" data-user="@item.Username">
-                            </button>
-                    </div>
-                </td>
-                <td>
-                    <form id="editForm_@item.Username"/>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
 
-<button type="button" id="createBtn" class="btn btn-primary float-lg-none circular" data-toggle="modal">
-    <i class="fas fa-plus"></i>
-</button>
+        <div class="postBlock">
+            <a asp-action="Details" asp-route-id="@item.PostID" style="color: black">
+                <img src="@item.PicUrls" class="postImg" />
+            </a>
+
+
+        </div>}
+    </div>}
+
+
+
 
 <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="deleteModal" data-url='@Url.Action("Delete")'>
     <div class="modal-dialog" role="document">
@@ -242,7 +201,7 @@
                     $("#usersTableBody").html('');
                     users.forEach(user => {
                         const mailHref = "mailto:" + user.email;
-                       
+
                         let isAdminData;
                         if (user.isAdmin) {
                             isAdminData = "<td class='isAdmin'>" +
@@ -293,3 +252,4 @@
                 })
             }
 </script>
+
