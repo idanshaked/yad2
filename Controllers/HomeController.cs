@@ -29,7 +29,7 @@ namespace yad2.Controllers
         public IActionResult Index()
         {
             ViewBag.tags = "";
-            //ViewBag.tags = _context.Tags.ToList(); //_context.Tags.ToList();
+            ViewBag.tags = _context.Tags.ToList().Take(5); 
             return View();
         }
 
