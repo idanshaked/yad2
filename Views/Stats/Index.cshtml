@@ -22,7 +22,7 @@
     </div>
     <div class="single-chart-pie">
         <h3>
-            פילוח תגיות
+            מוצרים על פי חנויות
         </h3>
         <div class="chart-container">
             <canvas id="myChart2"></canvas>
@@ -59,20 +59,12 @@
 <script>
 
     $(document).ready(function () {
-        const postsByTagsData = {
-            labels: [
-                'נדלן',
-                'רכב',
-                'מחשבים'
-            ],
+        const productsByStore = {
+            labels: [],
             datasets: [{
                 label: 'My First Dataset',
                 data: [],
-                backgroundColor: [
-                    'rgb(255, 99, 132)',
-                    'rgb(54, 162, 235)',
-                    'rgb(255, 205, 86)'
-                ],
+                backgroundColor: [],
                 hoverOffset: 4
             }]
         };
@@ -83,8 +75,8 @@
                 {
                     label: 'כמות מודעות',
                     data: [],
-                    borderColor: "#ffff",
-                    backgroundColor: "#C70039",
+                    borderColor: "#000000",
+                    backgroundColor: "#fe6305",
                 }]
         }
         const postsPerDayConf = {
@@ -111,7 +103,7 @@
             type: 'get',
             success: function (data) {
                 console.log(data)
-                postsData.datasets[0].data = data.map(item => item.amount);
+                postsData.datasets[0].data = data.map(item => item.count);
                 postsData.labels = data.map(item => item.date);
                 const myChart = new Chart(
                     document.getElementById('myChart'),
@@ -123,14 +115,18 @@
 
 
 
-        // Get amount of posts grouped by its tags
+        // Get amount of products grouped by stores
         $.ajax({
-            url: '/Stats/PostsGroupByTags',
+            url: '/Stats/ProductsByStores',
             type: 'get',
             success: function (data) {
-                console.log("sarted");
-                postsByTagsData.datasets[0].data = JSON.parse(data);
-                const config = { type: 'pie', data:postsByTagsData, options: {} };
+                productsByStore.datasets[0].data = data.map(item => item.count);
+                productsByStore.labels = data.map(item => item.storeName);
+                productsByStore.datasets[0].data.forEach(_ => {
+                    let n = (Math.random() * 0xfffff * 1000000).toString(16);
+                    productsByStore.datasets[0].backgroundColor.push('#' + n.slice(0, 6));
+                })
+                const config = { type: 'pie', data: productsByStore, options: {} };
                
                 const myChart2 = new Chart(
                     document.getElementById('myChart2'),
