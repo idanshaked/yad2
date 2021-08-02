@@ -153,7 +153,36 @@ namespace yad2.Controllers
                 return NotFound();
             }
 
-            var post = await _context.Posts.FindAsync(id);
+            var post = await _context.Posts
+              .Include(a => a.Tags).Include(a => a.Product).ThenInclude(p => p.store).Include(a => a.Publisher).Select(p => new Post
+              {
+                  PostID = p.PostID,
+                  PublishDate = p.PublishDate,
+                  PicUrls = p.PicUrls,
+                  Tags = p.Tags,
+                  Publisher = new User
+                  {
+                      Username = p.Publisher.Username,
+                      Phone = p.Publisher.Phone,
+                      Email = p.Publisher.Email
+                  },
+                  Product = p.Product
+              })
+              .FirstOrDefaultAsync(m => m.PostID == id);
+
+            var tags = _context.Tags.Select(tag => new {
+                tageName = tag.tageName,
+                tagId = tag.tagId
+            }).ToList();
+            var stores = _context.Store.Select(store => new {
+                storeName = store.storeName,
+                storeId = store.storeId.ToString()
+            }).ToList();
+
+            ViewBag.tags = new MultiSelectList(tags, "tagId", "tageName");
+            ViewBag.stores = new MultiSelectList(stores, "storeId", "storeName");
+
+            //var post = await _context.Posts.FindAsync(id);
             if (post == null)
             {
                 return NotFound();
@@ -166,7 +195,7 @@ namespace yad2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PostID,PicUrls,PublishDate")] Post post)
+        public async Task<IActionResult> Edit(int id, [Bind("PostID,PicUrls,PublishDate")] Post post, Product product, int[] tagsIds)
         {
             if (id != post.PostID)
             {
@@ -178,6 +207,12 @@ namespace yad2.Controllers
                 try
                 {
                     _context.Update(post);
+
+                    foreach (var tag_id in tagsIds)
+                    {
+                        post.Tags.Add(_context.Tags.FirstOrDefault(p => p.tagId == tag_id));
+                    }
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

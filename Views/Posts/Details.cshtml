@@ -12,8 +12,9 @@
             float: right;
             margin-right: 0.5vw;
         }
+
         .chip {
-            margin-top: 5vh;
+            margin-top: 2vh;
             margin-right: 1vw;
             display: inline-flex;
             flex-direction: row;
@@ -76,9 +77,10 @@
             user-select: none;
             flex-shrink: 0;
         }
-        .chip-svg:hover {
-            color: #666666;
-        }
+
+            .chip-svg:hover {
+                color: #666666;
+            }
     </style>
 </head>
 <body>
@@ -99,18 +101,28 @@
                 <span class="publisherDetails"> @Html.DisplayFor(model => model.Publisher.Phone)  </span>
                 <span class="publisherDetails"> @Html.DisplayFor(model => model.Publisher.Email)  </span>
             </div>
-            <br/>
+            <br />
             <div>
-               @foreach (var tag in ViewBag.Tags)
-            {
-                <div class="chip">
-                    <div class="chip-content"> @tag.tageName </div>
-                    <div class="chip-close">
-                        <svg class="chip-svg" focusable="false" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"></path></svg>
+                @foreach (var tag in ViewBag.Tags)
+                {
+                    <div class="chip">
+                        <div class="chip-content"> @tag.tageName </div>
+                       
                     </div>
-                </div>
-            }
+                }
             </div>
+
+
+            <div class="container">
+                <a class="Edit link-button" asp-action="Edit" asp-route-id="@Model.PostID" ><i class="fas fa-pencil-alt"></i></a>
+                <a class="fas fa-user-times deleteBtn link-button " data-toggle="modal">
+                </a>
+                <a class="cancel fas fa-undo link-button " style="display:none">
+                </a>
+                <button type="submit" class="Update fas fa-save" style="display:none">
+                </button>
+            </div>
+
         </div>
     </div>
 </body>

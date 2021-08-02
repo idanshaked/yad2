@@ -14,7 +14,6 @@
 }
 
 $('.details').click(function (e) {
-    debugger
     const postId = e.target.dataset.postid;
     var url = e.target.dataset.url;
 
