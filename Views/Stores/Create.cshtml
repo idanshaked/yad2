@@ -1,31 +1,55 @@
 ﻿@model yad2.Models.Store
 
 @{
+    Layout = null;
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<style>
+    .form-group {
+        text-align: start;
+    }
 
-<h4>Store</h4>
-<hr />
+    form {
+        direction: rtl;
+    }
+</style>
+
+<div class="header">
+    <h4 class="modal-title" id="myModalLabel"> הוספת סניף חדש</h4>
+</div>
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
+    <div class="col-md-12">
+        <form asp-action="Create" asp-route-returnurl='@Context.Request.Query["ReturnUrl"]' asp-route-isFromLoginPage=@ViewBag.isFromLoginPage>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="storeName" class="control-label"></label>
-                <input asp-for="storeName" class="form-control" />
-                <span asp-validation-for="storeName" class="text-danger"></span>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label asp-for="storeName">שם סניף</label>
+                    <input asp-for="storeName" type="text" class="form-control" id="storeNameInput" required />
+                    <span asp-validation-for="storeName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="lat">קו רוחב</label>
+                    <input asp-for="lat" type="number" step="0.00000001" class="form-control" id="latInput" required>
+                    <span asp-validation-for="lat" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="lng"> קו אורך </label>
+                    <input asp-for="lng" type="number" step="0.00000001" class="form-control" id="lngInput" required>
+                    <span asp-validation-for="lng" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="lat" class="control-label"></label>
-                <input asp-for="lat" class="form-control" />
-                <span asp-validation-for="lat" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="lng" class="control-label"></label>
-                <input asp-for="lng" class="form-control" />
-                <span asp-validation-for="lng" class="text-danger"></span>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label asp-for="address">כתובת</label>
+                    <input asp-for="address" type="text" class="form-control" id="addressInput" required />
+                    <span asp-validation-for="address" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="Description">הסבר</label>
+                    <input asp-for="Description" type="text" class="form-control" id="descriptionInput" required>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -33,11 +57,3 @@
         </form>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
