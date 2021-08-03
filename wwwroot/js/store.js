@@ -22,40 +22,61 @@
     });
 }
 
-const addLocationToMap = (map, store) => {
-    const pushPin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(store.lat, store.lng), { color: 'blue' });
-    pushPin.setOptions({ enableHoverStyle: true });
-    pushPin.metadata = {
-        id: store.storeId,
-        title: store.storeName,
-        description: store.description,
-        address: store.address
-    };
+const handleCreate = () => {
+    var url = $('#createModal').data('url');
 
-    map.entities.push(pushPin);
+    $.get(url, function (data) {
+        $('#createContent').html(data);
 
-    const infoboxTemplate = '<div class="customInfobox" style="background-color:lightgray;":relative;"><div>{title}</div><br>{description}<br>{address}</div>  ';
-
-    const infobox = new Microsoft.Maps.Infobox(pushPin.getLocation(), {
-        visible: false
+        $('#createModal').modal('show');
     });
+}
 
-    infobox.setMap(map);
+const handleDelete = () => {
+    var url = $('#deleteModal').data('url');
+    $.ajax({
+        url: url,
+        type: 'get',
+        data: {
+            id: event.target.dataset.store
+        },
+        success: function (data) {
+            $('#deleteContent').html(data);
 
-    const showInfobox = e => {
-        if (e.target.metadata) {
-            infobox.setOptions({
-                location: e.target.getLocation(),
-                htmlContent: infoboxTemplate.replace('{title}', e.target.metadata.title).replace('{description}', e.target.metadata.description).replace('{address}', e.target.metadata.address),
-                visible: true
-            });
+            $('#deleteModal').modal('show');
         }
-    }
-    const hideInfobox = e => {
-        infobox.setOptions({ visible: false });
-    }
+    });
+}
 
+const handleEdit = (event) => {
+    var row = event.target.closest("tr");
+    $("td", row).each(function () {
+        if ($(this).find("input").length > 0) {
+            if (!$(this).hasClass("storeName")) {
+                $(this).find("input").show();
+                $(this).find("span").hide();
+            }
+        }
+    });
+    $(row).find(".Update").show();
+    $(row).find(".cancel").show();
+    $(row).find(".deleteBtn").hide();
+    $(event.target).hide();
+};
 
-    Microsoft.Maps.Events.addHandler(pushPin, 'mouseout', hideInfobox);
-    Microsoft.Maps.Events.addHandler(pushPin, 'click', showInfobox);
+const handleCancel = (event) => {
+    var row = event.target.closest("tr");
+    $("td", row).each(function () {
+        if ($(this).find("input").length > 0) {
+            var span = $(this).find("span");
+            var input = $(this).find("input");
+            input.val(span.data('val'));
+            input.hide();
+            span.show();
+        }
+    });
+    $(row).find(".Edit").show();
+    $(row).find(".deleteBtn").show();
+    $(row).find(".Update").hide();
+    $(event.target).hide();
 };
