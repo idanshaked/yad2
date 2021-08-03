@@ -31,29 +31,30 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item navbar-toggle">
-                        <a class="nav-link" asp-controller="Home" asp-action="Privacy">אודות <span class="sr-only">(current)</span></a>
+
 
                     <li class="nav-item navbar-toggle">
                         <a class="nav-link" asp-controller="Stores" asp-action="index">סניפים <span class="sr-only">(current)</span></a>
                     </li>
 
                     <li class="nav-item navbar-toggle">
-                        <a class="nav-link" asp-controller="Posts" asp-action="Index">מוצרים <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" asp-controller="Posts" asp-action="Index">פוסטים <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item navbar-toggle">
 
-                        <a class="nav-link" asp-controller="Tags" asp-action="index">תגיות<span class="sr-only">(current)</span></a>
-                    </li>
 
                     @if (Context.User != null & Context.User.Claims != null & Context.User.Claims.Count() > 0 && User.FindFirst("isAdmin").Value == "True")
                     {
                         <li class="nav-item navbar-toggle">
-                            <a class="nav-link" asp-controller="Home" asp-action="Privacy">גרפים<span class="sr-only">(current)</span></a>
+                            <a class="nav-link" asp-controller="Stats" asp-action="Index">גרפים<span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item navbar-toggle">
                             <a class="nav-link" asp-controller="Users" asp-action="Index">ניהול משתמשים<span class="sr-only">(current)</span></a>
                         </li>
+                        <li class="nav-item navbar-toggle">
+
+                            <a class="nav-link" asp-controller="Tags" asp-action="index">תגיות<span class="sr-only">(current)</span></a>
+                        </li>
+
                     }
 
 
@@ -96,8 +97,6 @@
                 <div class="vertical-links small toggle">
                     <div class="text-center ">
                         © יד 2 - זכויות שמורות ©
-
-                        <a class="text-reset fw-bold contact" asp-controller="Home" asp-action="Privacy">צור קשר</a>
                     </div>
                 </div>
             </div>
