@@ -47,10 +47,11 @@ namespace yad2
             services.AddRazorPages(options =>
             {
                 options.Conventions.AuthorizeFolder("/Home");
-                options.Conventions.AuthorizeFolder("/Privacy");
                 options.Conventions.AuthorizeFolder("/Users");
+                options.Conventions.AuthorizeFolder("/Tags");
                 options.Conventions.AllowAnonymousToPage("/Login");
                 options.Conventions.AllowAnonymousToPage("/Create");
+                options.Conventions.AllowAnonymousToPage("/Stores");
             });
 
         }

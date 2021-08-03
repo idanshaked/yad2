@@ -4,35 +4,73 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<style>
+    .label {
+        margin-left: 100%;
+    }
 
-<h4>Post</h4>
-<hr />
+    .picInput {
+        margin-left: 83%;
+    }
+
+    .editPost {
+        margin-left: 81%;
+        display: flex;
+        margin-top: 3%;
+    }
+</style>
+
+<h1 class="title editPost">עריכת פוסט</h1>
+
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="PostID" />
-            <div class="form-group">
-                <label asp-for="PicUrls" class="control-label"></label>
-                <input asp-for="PicUrls" class="form-control" />
-                <span asp-validation-for="PicUrls" class="text-danger"></span>
+            <input type="hidden" asp-for="Publisher.Username" />
+            <input type="hidden" asp-for="PublishDate" />
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label asp-for="Product.price" class="label">מחיר </label>
+                    <input asp-for="Product.price" type="number" class="form-control" id="priceInput" required />
+                    <span asp-validation-for="Product.price" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="PicUrls" class="picInput"> תמונה (URL) </label>
+                    <input asp-for="PicUrls" type="text" class="form-control" id="picsInput" required />
+                    <span asp-validation-for="PicUrls" class="text-danger"></span>
+                </div>
+
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label asp-for="Tags" class="tagsInput label" >תגיות  </label>
+                    @Html.DropDownList("tagsIds", (MultiSelectList)ViewBag.tags, new { multiple = "multiple", @class = "form-control", required = "required" })
+
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="label">חנויות  </label>
+                    <select id="drpEmpList" class="form-control" asp-for="Product.storeId" asp-items="@(new SelectList(ViewBag.stores, "Value", "Text"))">
+                        <option value="">--בחר חנות--</option>
+                    </select>
+
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="Product.description" class="label">תיאור </label>
+                    <textarea asp-for="Product.description" id="descriptionInput" type="text" class="form-control" required> </textarea>
+                    <span asp-validation-for="Product.description" class="text-danger"></span>
+                </div>
             </div>
             <div class="form-group">
-                <label asp-for="PublishDate" class="control-label"></label>
-                <input asp-for="PublishDate" class="form-control" />
-                <span asp-validation-for="PublishDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="שמירה" class="btn btn-primary submit_btn" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

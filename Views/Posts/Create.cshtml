@@ -37,7 +37,7 @@
                     <select id="drpEmpList" class="form-control" asp-for="Product.storeId" asp-items="@(new SelectList(ViewBag.stores, "Value", "Text"))">
                         <option value="">--בחר חנות--</option>
                     </select>
-                    
+
                 </div>
             </div>
             <div class="form-row">
@@ -47,10 +47,12 @@
                     <span asp-validation-for="Product.description" class="text-danger"></span>
                 </div>
             </div>
+
             <div class="form-group">
                 <input type="submit" value="יצירה" class="btn btn-primary submit_btn" />
             </div>
         </form>
     </div>
 </div>
+
 

@@ -3,6 +3,7 @@
 }
 <html>
 <head>
+    <script src="https://weatherwidget.io/js/widget.min.js"></script>
     <style>
         .header {
             background-image: url("https://assets.yad2.co.il/yad2site/y2assets/images/pages/home/background.png");
@@ -12,9 +13,9 @@
             margin-bottom: 3%;
         }
 
-        .header > img {
-            width: 250px;
-        }
+            .header > img {
+                width: 250px;
+            }
 
         body {
             text-align: right;
@@ -77,11 +78,13 @@
     </div>
     <h3>?מי אנחנו</h3>
     <hr>
-    <iframe width="1140" height="500" src="https://www.youtube.com/embed/PZ9_OC7LQBk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <video controls src="homeVideo.mp4" style="width: 60%; margin-right: 20%;"></video>
     <hr />
     <div class="share-container">
         <span class="share-header">אהבתם? נשמח לשיתוף</span>
         <iframe src="https://www.facebook.com/plugins/share_button.php?href=https%3A%2F%2Fyad-colman.herokuapp.com%2F&layout=button&size=large&width=77&height=28&appId" width="77" height="28" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
     </div>
+    <a class="weatherwidget-io" href="https://forecast7.com/en/32d0934d78/tel-aviv-yafo/" data-label_1="TEL AVIV" data-label_2="WEATHER" data-font="Arial Black" data-icons="Climacons Animated" data-mode="Current" data-textcolor="#222">TEL AVIV WEATHER</a>
+
 </body>
 </html>

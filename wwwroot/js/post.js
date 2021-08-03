@@ -1,4 +1,4 @@
-﻿$('.details').click(function (e) {
+$('.details').click(function (e) {
     handleDetails(e);
 });
 

@@ -4,29 +4,32 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-
-<h4>Tags</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="tagId" />
-            <div class="form-group">
-                <label asp-for="tageName" class="control-label"></label>
-                <input asp-for="tageName" class="form-control" />
-                <span asp-validation-for="tageName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+<div dir="rtl" style="text-align:right; padding: 2%">
+    <h1>עריכת תגית</h1>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="tagId" />
+                <div class="form-group">
+                    <label asp-for="tageName" class="control-label">שם תגית</label>
+                    <input asp-for="tageName" class="form-control" />
+                    <span asp-validation-for="tageName" class="text-danger"></span>
+                    <label asp-for="tagIcon" class="control-label">שם אייקון</label>
+                    <input asp-for="tagIcon" class="form-control" />
+                    <span asp-validation-for="tagIcon" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="שמור" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+    <div>
+        <a asp-action="Index">חזרה</a>
+    </div>
 </div>
 
 @section Scripts {
