@@ -93,7 +93,7 @@ namespace yad2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("storeId,storeName,lat,lng,Description,address")] Store store)
+        public async Task<IActionResult> Edit(int id, [Bind("storeId,storeName,lat,lng,Description,address")] yad2.Models.Store store)
         {
             if (id != store.storeId)
             {
@@ -138,6 +138,7 @@ namespace yad2.Controllers
                 return NotFound();
             }
 
+            await _context.SaveChangesAsync();
             return View(store);
         }
 
@@ -148,6 +149,7 @@ namespace yad2.Controllers
         {
             var store = await _context.Store.FindAsync(id);
             _context.Store.Remove(store);
+            _context.Posts.RemoveRange(_context.Posts.Where(p => p.Product.StoreID == id));
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -155,6 +157,13 @@ namespace yad2.Controllers
         private bool StoreExists(int id)
         {
             return _context.Store.Any(e => e.storeId == id);
+        }
+        public async Task<IActionResult> Search(String storeName)
+        {
+            var result = _context.Store.AsQueryable();
+            if (!String.IsNullOrWhiteSpace(storeName))
+                result = result.Where(x => x.storeName.Contains(storeName));
+            return Json(result);
         }
     }
 }
