@@ -1,24 +1,21 @@
-﻿@model IEnumerable<yad2.Models.Post>
+﻿@model IEnumerable<yad2.Models.Post>;
 
 @{
-    ViewData["Title"] = "מוצרים";
+    ViewData["Title"] = "פוסטים";
 }
 
-
-
 <head>
-    <link rel="stylesheet" href="~/css/post.css"/>
+    <link rel="stylesheet" href="~/css/post.css" />
 </head>
 
 <div style="height: 60px">
-    <h1 class="title">מוצרים</h1>
+    <h1 class="title">פוסטים</h1>
 </div>
 <div style="width:100%">
     <div class="search_navbar">
         <button type="button" id="createBtn" class="btn btn-primary float-lg-none circular" data-toggle="modal">
             <i class="fas fa-plus"></i>
         </button>
-
 
         <span style="height: 36px;">
 
@@ -68,15 +65,11 @@
         <button onclick="searchUsers()"> חפש </button>
     </div>
 </div>
-
-
-
-
 <hr />
 @if (Model.Count() == 0)
 {
     <div class="noPosts">
-        <p> הוסף את הפוסט הראשון שלך</p>
+        <p>  אין פוסטים לצפייה</p>
     </div> }
 else
 {
@@ -84,19 +77,17 @@ else
         @foreach (var item in Model)
         {
 
-        <div class="postBlock">
-            <a asp-action="Details" asp-route-id="@item.PostID" style="color: black">
+            <div class="postBlock">
                 <img src="@item.PicUrls" class="postImg" />
-            </a>
-
-
-        </div>}
+                <div class="postText" data-toggle="modal">
+                    <div> @item.Product.price  ₪  </div>
+                    <button class="details" data-postId="@item.PostID" style="color: black" data-url='@Url.Action("Details")'> לפרטים נוספים </button>
+                </div>
+            </div>}
     </div>}
 
 
-
-
-<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="deleteModal" data-url='@Url.Action("Delete")'>
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="postDetails">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -119,12 +110,27 @@ else
     </div>
 </div>
 
+
+
+<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-url='@Url.Action("Details")'>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <button type="button" class="close" id="detailsCloseBtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <div id="detailsContent">
+            </div>
+        </div>
+
+    </div>
+</div>
+
 <script src="~/lib/jquery/dist/jquery.js"></script>
-<script src="~/js/users.js"></script>
+<script src="~/js/post.js"></script>
 <script src="~/js/Search.js"></script>
 <script>
 
     $(document).ready(function () {
+
+            $("")
 
             $(".table").on("submit", 'form', function (event) {
                 event.preventDefault();
@@ -163,6 +169,7 @@ else
                     row.find(".deleteBtn").show();
                     row.find(".Update").hide();
                     row.find(".cancel").hide();
+                    row.find("#DetailsModal").hide();
                     $(this).hide();
 
                     modifiedUser.isAdmin = row.find(".isAdmin").find("span").find("#realValue")[0].checked

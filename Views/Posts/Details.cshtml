@@ -1,30 +1,163 @@
 ﻿@model yad2.Models.Post
 
 @{
+    Layout = null;
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
 
-<div>
-    <h4>Post</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PicUrls)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PicUrls)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PublishDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PublishDate)
-        </dd>
-    </dl>
+<head>
+    <style>
+        .publisherDetails {
+            line-height: 20px;
+            float: right;
+            margin-right: 0.5vw;
+        }
+
+        .chip {
+            margin-top: 2vh;
+          
+            display: inline-flex;
+            flex-direction: row;
+            background-color: #e5e5e5;
+            border: none;
+            cursor: default;
+            height: 36px;
+            outline: none;
+            padding: 0;
+            font-size: 14px;
+            font-color: #333333;
+            font-family: "Open Sans", sans-serif;
+            white-space: nowrap;
+            align-items: center;
+            border-radius: 16px;
+            vertical-align: middle;
+            text-decoration: none;
+            justify-content: center;
+        }
+
+        .chip-head {
+            display: flex;
+            position: relative;
+            overflow: hidden;
+            background-color: #32C5D2;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+            align-items: center;
+            user-select: none;
+            border-radius: 50%;
+            justify-content: center;
+            width: 36px;
+            color: #fff;
+            height: 36px;
+            font-size: 20px;
+            margin-right: -4px;
+        }
+
+        .chip-content {
+            cursor: inherit;
+            display: flex;
+            align-items: center;
+            user-select: none;
+            white-space: nowrap;
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+
+        .chip-svg {
+            color: #999999;
+            cursor: pointer;
+            height: auto;
+            margin: 4px 4px 0 -8px;
+            fill: currentColor;
+            width: 1em;
+            height: 1em;
+            display: inline-block;
+            font-size: 24px;
+            transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+            user-select: none;
+            flex-shrink: 0;
+        }
+
+            .chip-svg:hover {
+                color: #666666;
+            }
+    </style>
+</head>
+<body>
+    <div class="card" style="width: 100%;">
+        <img src=@Html.DisplayFor(model => model.PicUrls) class="card-img-top">
+        <div class="card-body" style="text-align:initial">
+            <h5 class="card-title"> @Html.DisplayFor(model => model.Product.description) </h5>
+            <h6 class="card-title"> @Html.DisplayFor(model => model.PublishDate) </h6>
+            <h6 class="card-title"> @Html.DisplayFor(model => model.Product.price) ש"ח </h6>
+            <div style="height:5vh">
+                <span style="float:right"> <h6> נמצא בחנות: </h6> </span>
+                <span class="publisherDetails"> @Html.DisplayFor(Model => Model.Product.store.storeName)</span>
+                <span class="publisherDetails"> @Html.DisplayFor(Model => Model.Product.store.address)</span>
+            </div>
+            <div>
+                <span style="float:right"> <h6 class="card-title"> ליצירת קשר: </h6> </span>
+                <span class="publisherDetails"> @Html.DisplayFor(model => model.Publisher.Username)  </span>
+                <span class="publisherDetails"> @Html.DisplayFor(model => model.Publisher.Phone)  </span>
+                <span class="publisherDetails"> @Html.DisplayFor(model => model.Publisher.Email)  </span>
+            </div>
+            <br />
+            <div>
+            
+                @foreach (var tag in ViewBag.Tags)
+                {
+                    <div class="chip">
+                        <div class="chip-content"> @tag.tageName </div>
+
+                    </div>
+                }
+            </div>
+
+            @if (Context.User != null & Context.User.Claims != null & Context.User.Claims.Count() > 0 && (User.FindFirst("isAdmin").Value == "True" || Context.User.Identity.Name == Model.Publisher.Username))
+            {
+                <div class="container" style=" margin-right: 80%;">
+                    <a class="Edit link-button" asp-action="Edit" asp-route-id="@Model.PostID"><i class="fas fa-pencil-alt"></i></a>
+                    <a class="fas fa-user-times deleteBtn link-button " data-toggle="modal" data-user="@Model.PostID">
+                    </a>
+                    <a class="cancel fas fa-undo link-button " style="display:none">
+                    </a>
+                    <button type="submit" class="Update fas fa-save" style="display:none">
+                    </button>
+                </div>
+
+            }
+
+        </div>
+    </div>
+</body>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="deleteModal" data-url='@Url.Action("Delete")'>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close closeBtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">שים לב!</h4>
+            </div>
+            <div id="deleteBody"></div>
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.PostID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+<script>
+    $(".deleteBtn").on('click', function (event) {
+        var url = $('#deleteModal').data('url');
+        $.ajax({
+            url: url,
+            type: 'get',
+            data: {
+                id: event.target.dataset.user
+            },
+            success: function (data) {
+                $('#deleteBody').html(data);
+
+                $('#deleteModal').modal('show');
+            }
+        });
+    })
+</script>
