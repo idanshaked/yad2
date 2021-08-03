@@ -5,6 +5,7 @@
     ViewData["Title"] = "Details";
 }
 
+
 <head>
     <style>
         .publisherDetails {
@@ -15,7 +16,7 @@
 
         .chip {
             margin-top: 2vh;
-            margin-right: 1vw;
+          
             display: inline-flex;
             flex-direction: row;
             background-color: #e5e5e5;
@@ -103,25 +104,29 @@
             </div>
             <br />
             <div>
+            
                 @foreach (var tag in ViewBag.Tags)
                 {
                     <div class="chip">
                         <div class="chip-content"> @tag.tageName </div>
-                       
+
                     </div>
                 }
             </div>
 
+            @if (Context.User != null & Context.User.Claims != null & Context.User.Claims.Count() > 0 && (User.FindFirst("isAdmin").Value == "True" || Context.User.Identity.Name == Model.Publisher.Username))
+            {
+                <div class="container" style=" margin-right: 80%;">
+                    <a class="Edit link-button" asp-action="Edit" asp-route-id="@Model.PostID"><i class="fas fa-pencil-alt"></i></a>
+                    <a class="fas fa-user-times deleteBtn link-button " data-toggle="modal" data-user="@Model.PostID">
+                    </a>
+                    <a class="cancel fas fa-undo link-button " style="display:none">
+                    </a>
+                    <button type="submit" class="Update fas fa-save" style="display:none">
+                    </button>
+                </div>
 
-            <div class="container">
-                <a class="Edit link-button" asp-action="Edit" asp-route-id="@Model.PostID" ><i class="fas fa-pencil-alt"></i></a>
-                <a class="fas fa-user-times deleteBtn link-button " data-toggle="modal" data-user="@Model.PostID">
-                </a>
-                <a class="cancel fas fa-undo link-button " style="display:none">
-                </a>
-                <button type="submit" class="Update fas fa-save" style="display:none">
-                </button>
-            </div>
+            }
 
         </div>
     </div>

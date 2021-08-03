@@ -32,7 +32,7 @@ namespace yad2.Controllers
             if (!String.IsNullOrEmpty(username))
             {
                 var users = from u in _context.User
-                            where u.Username == username && u.isAdmin
+                            where u.Username == username
                             select u;
                 if (users.Count() == 0)
                 {
@@ -180,6 +180,7 @@ namespace yad2.Controllers
             }).ToList();
 
             ViewBag.tags = new MultiSelectList(tags, "tagId", "tageName");
+
             ViewBag.stores = new MultiSelectList(stores, "storeId", "storeName");
 
             //var post = await _context.Posts.FindAsync(id);
@@ -195,40 +196,46 @@ namespace yad2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PostID,PicUrls,PublishDate")] Post post, Product product, int[] tagsIds)
+        public async Task<IActionResult> Edit(int id, [Bind("PostID,PicUrls,PublishDate")] Post post, Product product, int[] tagsIds, User Publisher)
         {
             if (id != post.PostID)
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
-            {
-                try
+                post.Publisher = _context.User.Where(x => x.Username.Equals(Publisher.Username)).FirstOrDefault();
+                post.Product = product;
+                post.PicUrls = post.PicUrls;
+                post.PublishDate = post.PublishDate;
+                post.Tags = new List<Tags>();
+                foreach (var tag_id in tagsIds)
                 {
-                    _context.Update(post);
-
-                    foreach (var tag_id in tagsIds)
-                    {
-                        post.Tags.Add(_context.Tags.FirstOrDefault(p => p.tagId == tag_id));
-                    }
-
-                    await _context.SaveChangesAsync();
+                    post.Tags.Add(_context.Tags.FirstOrDefault(p => p.tagId == tag_id));
                 }
-                catch (DbUpdateConcurrencyException)
+
+                _context.Posts.Add(new Post
                 {
-                    if (!PostExists(post.PostID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(post);
+                    PublishDate = post.PublishDate,
+                    Product = product,
+                    Publisher = _context.User.Where(x => x.Username.Equals(Publisher.Username)).FirstOrDefault(),
+                    PicUrls = post.PicUrls,
+                    Tags = post.Tags
+                });
+
+            
+                await _context.SaveChangesAsync();
+
+                var old_post = await _context.Posts.FindAsync(id);
+                var old_product = _context.Products.Where(x => x.PostID.Equals(old_post.PostID)).FirstOrDefault();
+                old_post.Product = old_product;
+                var old_postsProduct = await _context.Products.FindAsync(old_post.Product.ProductID);
+                _context.Posts.Remove(old_post);
+                _context.Products.Remove(old_postsProduct);
+                await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+
+
+            
         }
 
         // GET: Posts/Delete/5
