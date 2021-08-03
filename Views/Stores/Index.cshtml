@@ -84,7 +84,7 @@
             $("#storesTableBody").html('');
             stores.forEach(store => {
                 const storeData =
-                    " <tr>" +
+                    " <tr data-storeId='" + store.storeId + "' data-lat='" + store.lat + "' data-lng='" + store.lng + "'>" +
                     "<td class='storeName'>" +
                     "<span data-val='" + store.storeName + "'>" +
                     store.storeName +
@@ -103,13 +103,14 @@
                     "</span>" +
                     "<input form='editForm_" + store.description + "' value='" + store.description + "' name='descriptionEdit' class='form-control' style='display:none' required />" +
                     "</td>" +
-                    "<td>" +
+                    "                     @if (Context.User != null & Context.User.Claims != null & Context.User.Claims.Count() > 0 && User.FindFirst("isAdmin").Value == "True")
+                    { <td>" +
                     "<div class='container'>" +
                     "<a class='Edit link-button' onclick='handleEdit(event)'><i class='fas fa-pencil-alt' ></i></a>" +
                     "<a class='fas fa-user-times deleteBtn link-button' onclick='handleDelete()' data-toggle='modal' data-store='" + store.storeId + "'> </a>" +
                     "<a class='cancel fas fa-undo link-button' onclick='handleCancel(event)' style='display:none' data-store='" + store.storeId +"'> </a>" +
                     "<button form='editForm_" + store.storeName + "' type='submit' class='Update fas fa-save' style='display:none' data-store='" + store.storeId + "'></button>" +
-                    "</div> </td> <td> <form id='editForm_" + store.storeName + "'/> </td> </tr>"
+                    "</div> </td> <td> <form id='editForm_" + store.storeName + "'/> </td>} </tr>"
                 $("#storesTableBody").append(storeData);
 
             })
@@ -217,26 +218,27 @@
     <tbody id="storesTableBody">
         @foreach (var store in Model)
         {
-            <tr data-storeId="@store.storeId" data-lat="@store.lat" data-lng="@store.lng">
-                <td class="storeName">
-                    <span data-val="@store.storeName">
-                        @Html.DisplayFor(modelItem => store.storeName)
-                    </span>
-                    <input form="editForm_@store.storeName" value="@store.storeName" name="storenameEdit" class="form-control" style="display:none" required />
-                </td>
-                <td class="address">
-                    <span data-val="@store.address">
-                        @Html.DisplayFor(modelItem => store.address)
-                    </span>
-                    <input form="editForm_@store.address" value="@store.address" name="addressEdit" class="form-control " style="display:none" required />
-                </td>
-                <td class="Description">
-                    <span data-val="@store.Description">
-                        @Html.DisplayFor(modelItem => store.Description)
-                    </span>
-                    <input form="editForm_@store.Description" value="@store.Description" name="descriptionEdit" class="form-control" style="display:none" required />
-                </td>
-
+        <tr data-storeId="@store.storeId" data-lat="@store.lat" data-lng="@store.lng">
+            <td class="storeName">
+                <span data-val="@store.storeName">
+                    @Html.DisplayFor(modelItem => store.storeName)
+                </span>
+                <input form="editForm_@store.storeName" value="@store.storeName" name="storenameEdit" class="form-control" style="display:none" required />
+            </td>
+            <td class="address">
+                <span data-val="@store.address">
+                    @Html.DisplayFor(modelItem => store.address)
+                </span>
+                <input form="editForm_@store.address" value="@store.address" name="addressEdit" class="form-control " style="display:none" required />
+            </td>
+            <td class="Description">
+                <span data-val="@store.Description">
+                    @Html.DisplayFor(modelItem => store.Description)
+                </span>
+                <input form="editForm_@store.Description" value="@store.Description" name="descriptionEdit" class="form-control" style="display:none" required />
+            </td>
+            @if (Context.User != null & Context.User.Claims != null & Context.User.Claims.Count() > 0 && User.FindFirst("isAdmin").Value == "True")
+            {
                 <td>
                     <div class="container">
                         <a class="Edit link-button" onclick="handleEdit(event)"><i class="fas fa-pencil-alt"></i></a>
@@ -248,10 +250,12 @@
                         </button>
                     </div>
                 </td>
-                <td>
-                    <form id="editForm_@store.storeName" />
-                </td>
-            </tr>
+
+            <td>
+                <form id="editForm_@store.storeName" />
+            </td>
+            }
+        </tr>
         }
     </tbody>
 </table>
