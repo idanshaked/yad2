@@ -46,8 +46,19 @@ namespace yad2.Controllers
                     {
                         var product = _context.Products.Where(x => x.PostID.Equals(post.PostID)).FirstOrDefault();
                         post.Product = product;
-
                     }
+
+                    var tags = _context.Tags.Select(tag => new {
+                        tageName = tag.tageName,
+                        tagId = tag.tagId
+                    }).ToList();
+                    var stores = _context.Store.Select(store => new {
+                        storeName = store.storeName,
+                        storeId = store.storeId.ToString()
+                    }).ToList();
+
+                    ViewBag.tags = new MultiSelectList(tags, "tagId", "tageName");
+                    ViewBag.stores = new MultiSelectList(stores, "storeId", "storeName");
 
                     return View(posts);
                 }
@@ -226,8 +237,50 @@ namespace yad2.Controllers
         }
 
         private bool PostExists(int id)
+
         {
             return _context.Posts.Any(e => e.PostID == id);
+        }
+
+        public async Task<IActionResult> Search(string generalSearch, string description, string minPrice, string maxPrice, [FromQuery(Name = "storesIds")]string storesIds)
+        {
+            var result = _context.Posts.AsQueryable();
+
+            if (!String.IsNullOrWhiteSpace(generalSearch))
+            {
+                result = result.Where(x => x.Product.description.Contains(generalSearch) ||
+                x.Publisher.Username.Contains(generalSearch));
+            }
+            if (!String.IsNullOrWhiteSpace(description))
+            {
+                result = result.Where(x => x.Product.description.Contains(description));
+            }
+            if (minPrice != null && maxPrice != null)
+            {
+                result = result.Where(x => x.Product.price >= Int16.Parse(minPrice) && 
+                x.Product.price <= Int16.Parse(maxPrice));
+            } else if (minPrice != null)
+            {
+                result = result.Where(x => x.Product.price >= Int16.Parse(minPrice));
+            } else if (maxPrice != null)
+            {
+                result = result.Where(x => x.Product.price <= Int16.Parse(maxPrice));
+            }
+            if (!String.IsNullOrWhiteSpace(storesIds))
+            {
+                string[] storesArray = storesIds.Split(",");
+                int[] storesIdsArray = Array.ConvertAll(storesArray, s => int.Parse(s));
+                result = result.Where(p => storesIdsArray.Contains(p.Product.storeId));
+            }
+          //  if (!String.IsNullOrWhiteSpace()
+            result = result.Select(p => new Post
+            {
+                PostID = p.PostID,
+                PicUrls = p.PicUrls,
+                Product = p.Product
+            });
+
+            return Json(result);
         }
     }
 }

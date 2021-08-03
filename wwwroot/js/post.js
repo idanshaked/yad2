@@ -1,35 +1,5 @@
-﻿const validateUser = (user) => {
-    const { Password, Phone, Email } = user;
-    const invalidFields = []
-    if (!Password) {
-        invalidFields.push("Password")
-    }
-    if (!Phone || !(/^05\d{8}/).test(Phone)) {
-        invalidFields.push("phone")
-    }
-    if (!Email) {
-        invalidFields.push("mail")
-    }
-    return invalidFields;
-}
-
-$('.details').click(function (e) {
-    debugger
-    const postId = e.target.dataset.postid;
-    var url = e.target.dataset.url;
-
-    $.ajax({
-        url: url,
-        type: 'get',
-        data: {
-            id: postId
-        },
-        success: function (data) {
-            $('#detailsContent').html(data);
-
-            $('#detailsModal').modal('show');
-        }
-    });
+﻿$('.details').click(function (e) {
+    handleDetails(e);
 });
 
 $('#createBtn').click(function () {
@@ -99,3 +69,21 @@ $(".table").on("click", ".cancel", function () {
     row.find(".Update").hide();
     $(this).hide();
 });
+
+const handleDetails = (e) => {
+    const postId = e.target.dataset.postid;
+    var url = e.target.dataset.url;
+
+    $.ajax({
+        url: url,
+        type: 'get',
+        data: {
+            id: postId
+        },
+        success: function (data) {
+            $('#detailsContent').html(data);
+
+            $('#detailsModal').modal('show');
+        }
+    });
+}

@@ -236,7 +236,7 @@
                     admin: searchByAdmin ? $("#adminSearch").prop('checked') : null
                 }
 
-                getSearchedUsers(searchFields).then(function (users) {
+        getSearchedEntities("/Users/Search/", searchFields).then(function (users) {
                     $("#usersTableBody").html('');
                     users.forEach(user => {
                         const mailHref = "mailto:" + user.email;

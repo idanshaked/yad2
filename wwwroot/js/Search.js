@@ -1,8 +1,8 @@
-﻿const getSearchedUsers = function (fields) {
+﻿const getSearchedEntities = function (url,fields) {
     return new Promise(resolve => {
         $.ajax({
             type: "GET",
-            url: "/Users/Search/",
+            url: url,
             data: fields,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
