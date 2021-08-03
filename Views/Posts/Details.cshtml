@@ -115,7 +115,7 @@
 
             <div class="container">
                 <a class="Edit link-button" asp-action="Edit" asp-route-id="@Model.PostID" ><i class="fas fa-pencil-alt"></i></a>
-                <a class="fas fa-user-times deleteBtn link-button " data-toggle="modal">
+                <a class="fas fa-user-times deleteBtn link-button " data-toggle="modal" data-user="@Model.PostID">
                 </a>
                 <a class="cancel fas fa-undo link-button " style="display:none">
                 </a>
@@ -126,3 +126,33 @@
         </div>
     </div>
 </body>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="deleteModal" data-url='@Url.Action("Delete")'>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close closeBtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">שים לב!</h4>
+            </div>
+            <div id="deleteBody"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(".deleteBtn").on('click', function (event) {
+        var url = $('#deleteModal').data('url');
+        $.ajax({
+            url: url,
+            type: 'get',
+            data: {
+                id: event.target.dataset.user
+            },
+            success: function (data) {
+                $('#deleteBody').html(data);
+
+                $('#deleteModal').modal('show');
+            }
+        });
+    })
+</script>

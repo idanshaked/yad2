@@ -255,7 +255,11 @@ namespace yad2.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var post = await _context.Posts.FindAsync(id);
+            var product = _context.Products.Where(x => x.PostID.Equals(post.PostID)).FirstOrDefault();
+            post.Product = product;
+            var postsProduct = await _context.Products.FindAsync(post.Product.ProductID);
             _context.Posts.Remove(post);
+            _context.Products.Remove(postsProduct);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
