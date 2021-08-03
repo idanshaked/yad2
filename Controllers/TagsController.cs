@@ -54,7 +54,7 @@ namespace yad2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("tagId,tageName,tageIcon")] Tags tags)
+        public async Task<IActionResult> Create([Bind("tagId,tageName,tagIcon")] Tags tags)
         {
             if (ModelState.IsValid)
             {
