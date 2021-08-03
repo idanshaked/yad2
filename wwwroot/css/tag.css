@@ -16,11 +16,23 @@
     margin: 2%;
 }
 
-.fas {
+.edit-icon {
     float: left;
-    color:#aba7a7;
+    padding-left: 5px;
+    cursor: pointer;
+    color: #212529;
 }
 
+.create-btn {
+    font-size: 250%;
+    position: fixed;
+    bottom: 60px;
+    left: 65px;
+    cursor: pointer;
+}
 
+.colored-btn {
+    color: #fe5b02;
+}
 
 

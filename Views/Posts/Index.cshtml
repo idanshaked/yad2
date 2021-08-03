@@ -1,27 +1,22 @@
-﻿@model IEnumerable<yad2.Models.Post>
+﻿@model IEnumerable<yad2.Models.Post>;
 
 @{
-    ViewData["Title"] = "מוצרים";
+    ViewData["Title"] = "פוסטים";
 }
 
-
-
 <head>
-    <link rel="stylesheet" href="~/css/post.css"/>
+    <link rel="stylesheet" href="~/css/post.css" />
 </head>
 
 <div style="height: 60px">
-    <h1 class="title">מוצרים</h1>
+    <h1 class="title">פוסטים</h1>
 </div>
 <div style="width:100%">
     <div class="search_navbar">
         <button type="button" id="createBtn" class="btn btn-primary float-lg-none circular" data-toggle="modal">
             <i class="fas fa-plus"></i>
         </button>
-
-
         <span style="height: 36px;">
-
             <h5 style="float: right; margin-left: 15px;">חיפוש בסיסי </h5>
             <input type="text" id="generalSearch" style="float: right;" />
         </span>
@@ -39,23 +34,22 @@
                     <div class="container" style="margin-bottom: 10px;">
                         <div class="row">
                             <span class="col-2" style="text-align: initial">
-                                <label> שם משתמש </label>
-                                <input id="usernameSearch" type="text" style="width: 100%" />
+                                <div class="form-group">
+                                    <label for="descriptionSearch"> תיאור </label>
+                                    <input type="text" id="descriptionSearch" style="width:100%"/>
+                                </div>
+                            </span>
+                            <span class="col-4" style="text-align: initial">
+                                <label style="width:100%"> מחיר </label>
+                                <input id="minPrice" type="number" style="width: 45%" />
+                                -
+                                <input id="maxPrice" type="number" style="width: 45%" />
                             </span>
                             <span class="col-2" style="text-align: initial">
-                                <label> מייל </label>
-                                <input id="mailSearch" type="text" style="width: 100%" />
-                            </span>
-                            <span class="col-2" style="text-align: initial">
-                                <label> מספר טלפון </label>
-                                <input id="phoneSearch" type="text" style="width: 100%" />
-                            </span>
-                            <span class="col-3" style="text-align: initial">
-                                בחר האם לסנן לפי שדה זה
-                                <div class="custom-control custom-switch" style="line-height:15px">
-                                    <input type="checkbox" class="custom-control-input" id="adminSearch">
-                                    </br>
-                                    <label class="custom-control-label" for="adminSearch"><input type="checkbox" id="isSearchByAdmin" /> האם מנהל?</label>
+                                <div class="form-group">
+                                    <label for="exampleFormControlSelect1"> חנות </label>
+                                    <select id="storesSearch" multiple class="form-control" asp-items="@(new SelectList(ViewBag.stores, "Value", "Text"))">
+                                    </select>
                                 </div>
                             </span>
                         </div>
@@ -65,18 +59,14 @@
         </div>
     </div>
     <div>
-        <button onclick="searchUsers()"> חפש </button>
+        <button onclick="searchPosts()"> חפש </button>
     </div>
 </div>
-
-
-
-
 <hr />
 @if (Model.Count() == 0)
 {
     <div class="noPosts">
-        <p> הוסף את הפוסט הראשון שלך</p>
+        <p>  אין פוסטים לצפייה</p>
     </div> }
 else
 {
@@ -84,19 +74,17 @@ else
         @foreach (var item in Model)
         {
 
-        <div class="postBlock">
-            <a asp-action="Details" asp-route-id="@item.PostID" style="color: black">
+            <div class="postBlock">
                 <img src="@item.PicUrls" class="postImg" />
-            </a>
-
-
-        </div>}
+                <div class="postText" data-toggle="modal">
+                    <div> @item.Product.price  ₪  </div>
+                    <button class="details" data-postId="@item.PostID" style="color: black" data-url='@Url.Action("Details")'> לפרטים נוספים </button>
+                </div>
+            </div>}
     </div>}
 
 
-
-
-<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="deleteModal" data-url='@Url.Action("Delete")'>
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="postDetails">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -119,14 +107,26 @@ else
     </div>
 </div>
 
-<script src="~/lib/jquery/dist/jquery.js"></script>
-<script src="~/js/users.js"></script>
-<script src="~/js/Search.js"></script>
-<script>
+<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-url='@Url.Action("Details")'>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <button type="button" class="close" id="detailsCloseBtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <div id="detailsContent">
+            </div>
+        </div>
 
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/post.js"></script>
+<script src="~/js/Search.js"></script>
+
+<script>
+    11
     $(document).ready(function () {
 
-            $(".table").on("submit", 'form', function (event) {
+        $(".table").on("submit", 'form', function (event) {
                 event.preventDefault();
                 var row = $(this).closest("tr");
                 var modifiedUser = {};
@@ -163,6 +163,7 @@ else
                     row.find(".deleteBtn").show();
                     row.find(".Update").hide();
                     row.find(".cancel").hide();
+                    row.find("#DetailsModal").hide();
                     $(this).hide();
 
                     modifiedUser.isAdmin = row.find(".isAdmin").find("span").find("#realValue")[0].checked
@@ -186,70 +187,32 @@ else
             });
     })
 
-    const searchUsers = () => {
-        const searchByAdmin = $("#isSearchByAdmin").prop('checked');
+    const searchPosts = () => {
 
-                const searchFields = {
-                    general: $("#generalSearch").val(),
-                    username: $("#usernameSearch").val(),
-                    mail: $("#mailSearch").val(),
-                    phoneNumber: $("#phoneSearch").val(),
-                    admin: searchByAdmin ? $("#adminSearch").prop('checked') : null
-                }
+        const fields = {
+            generalSearch: $("#generalSearch").val(),
+            description: $("#descriptionSearch").val(),
+            minPrice: $("#minPrice").val(),
+            maxPrice: $("#maxPrice").val(),
+        }
 
-                getSearchedUsers(searchFields).then(function (users) {
-                    $("#usersTableBody").html('');
-                    users.forEach(user => {
-                        const mailHref = "mailto:" + user.email;
+        getSearchedEntities("/Posts/Search/?storesIds=" + $("#storesSearch").val(), fields).then(function (posts) {
+            let container = $(".postList");
 
-                        let isAdminData;
-                        if (user.isAdmin) {
-                            isAdminData = "<td class='isAdmin'>" +
-                                "<span> <input type='checkbox' disabled id='realValue' checked=" + user.isAdmin + " /> </span>" +
-                                "<input form='editForm_" + user.username + "'  type='checkbox' id='editable' checked=" + user.isAdmin + " style='display:none' />" +
-                                "</td>"
-                        } else {
-                            isAdminData = "<td class='isAdmin'>" +
-                                "<span> <input type='checkbox' disabled id='realValue' /> </span>" +
-                                "<input form='editForm_" + user.username + "'  type='checkbox' id='editable' style='display:none' />" +
-                                "</td> "
-                        }
-                        const userData =
-                            " <tr>" +
-                            "<td class='username'>" +
-                            "<span data-val='" + user.username + "'>" +
-                            user.username +
-                            "</span>" +
-                            "<input form='editForm_" + user.username + "' value='" + user.username + "' name='usernameEdit' class='form-control' style='display:none' required />" +
-                            "</td>" +
-                            "<td class='password form-group'>" +
-                            "<span data-val='" + user.password + "'> " +
-                            user.password +
-                            "</span>" +
-                            "<input form='editForm_" + user.username +"' value='" + user.password + "' name='passEdit' class='form-control' style='display:none' required />" +
-                            "</td>" +
-                            "<td class='mail'>" +
-                            "<span data-val='" + user.email + "'>" +
-                            "<a href='" + mailHref + "'>" + user.email + "</a>" +
-                            "</span>" +
-                            "<input form='editForm_" + user.username + "' name='mailEdit' value='" + user.email +"' class='form-control' style='display:none' required />" +
-                            "</td>" +
-                            "<td class='phone'>" +
-                            "<span data-val='" + user.phone + "'>" +
-                            user.phone +
-                            "</span>" +
-                            "<input form='editForm_" + user.username + "' name='phoneEdit' pattern='05[0-9]{8}' value='" + user.phone + "' class='form-control' style='display:none' required />" +
-                            "</td>" + isAdminData +
-                            "<td>" +
-                            "<div class='container'>" +
-                                "<a class='Edit'><i class='fas fa-pencil-alt'></i></a>"+
-                                "<a class='fas fa-user-times deleteBtn' data-toggle='modal' data-user='" + user.username +"'> </a>" +
-                                "<a class='cancel fas fa-undo' style='display:none' data-user='" + user.username +"'> </a>" +
-                                "<button form='editForm_" + user.username +"' type='submit' class='Update fas fa-save' style='display:none' data-user='" + user.Username + "'></button>" +
-                            "</div> </td> <td> <form id='editForm_" + user.username +"'/> </td> </tr>"
-                        $("#usersTableBody").append(userData);
-                    })
-                })
-            }
+            container.html('');
+            posts.forEach(post => {
+                const elem = `<div class="postBlock"><img src="`+post.picUrls+`" class="postImg" />
+                <div class="postText" data-toggle="modal">
+                    <div>`+ post.product.price + ` ₪  </div>
+                    <button class="details" data-postId="`+ post.postID +`" style="color: black" data-url='@Url.Action("Details")'> לפרטים נוספים </button>
+                </div>
+            </div>`
+                container.append(elem)
+                $('.details').click(function (e) {
+                   handleDetails(e)
+                });
+            })
+        })
+    }
 </script>
 

@@ -149,7 +149,7 @@ namespace yad2.Controllers
         {
             var store = await _context.Store.FindAsync(id);
             _context.Store.Remove(store);
-            _context.Posts.RemoveRange(_context.Posts.Where(p => p.Product.StoreID == id));
+            _context.Posts.RemoveRange(_context.Posts.Where(p => p.Product.storeId == id));
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

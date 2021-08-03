@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using yad2.Data;
 using yad2.Models;
+using System.Security.Claims;
+using System.IO;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace yad2.Controllers
 {
@@ -20,9 +24,29 @@ namespace yad2.Controllers
         }
 
         // GET: Tags
+        [Authorize]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Tags.ToListAsync());
+            string username = ((ClaimsIdentity)User.Identity).Name;
+            if (!String.IsNullOrEmpty(username))
+            {
+                var users = from u in _context.User
+                            where u.Username == username && u.isAdmin
+                            select u;
+                if (users.Count() == 0)
+                {
+                    return RedirectToAction(nameof(UsersController.AccessDenied), "Users");
+                }
+                else
+                {
+                    return View(await _context.Tags.ToListAsync());
+                }
+            }
+            else
+            {
+                return RedirectToAction(nameof(UsersController.AccessDenied), "Users");
+            }
+
         }
 
         // GET: Tags/Details/5
@@ -54,7 +78,7 @@ namespace yad2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("tagId,tageName,tageIcon")] Tags tags)
+        public async Task<IActionResult> Create([Bind("tagId,tageName,tagIcon")] Tags tags)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +110,7 @@ namespace yad2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("tagId,tageName,tageIcon")] Tags tags)
+        public async Task<IActionResult> Edit(int id, [Bind("tagId,tageName,tagIcon")] Tags tags)
         {
             if (id != tags.tagId)
             {
