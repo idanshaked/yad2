@@ -18,7 +18,9 @@
 
 .edit-icon {
     float: left;
-    color:#aba7a7;
+    padding-left: 5px;
+    cursor: pointer;
+    color: #212529;
 }
 
 .create-btn {

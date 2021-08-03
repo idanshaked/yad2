@@ -1,10 +1,11 @@
 ﻿@model IEnumerable<yad2.Models.Tags>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "תגיות";
 }
 <head>
     <link rel="stylesheet" href="~/css/tag.css" />
+    <script src="~/lib/jquery/dist/jquery.js"></script>
 </head>
 <div style="text-align:right;">
     <h1>ניהול תגיות</h1>
@@ -13,9 +14,10 @@
         {
         <div class="card border-dark mb-3">
             <div class="card-body">
-                    <a asp-action="Edit" asp-route-id="@item.tagId">
-                        <i class="fas fa-pen edit-icon"></i>
-                    </a> 
+                <a asp-action="Edit" asp-route-id="@item.tagId">
+                    <i class="fas fa-pen edit-icon"></i>
+                </a>
+                <a class="fas fa-trash deleteBtn edit-icon" data-toggle="modal" data-user="@item.tagId"></a>
                 <p class="card-text"> @Html.DisplayFor(modelItem => item.tageName)</p>
             </div>
         </div>
@@ -27,3 +29,33 @@
         <i class="colored-btn fas fa-plus-circle"></i>
     </a>
 </p>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="deleteModal" data-url='@Url.Action("Delete")'>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close closeBtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">שים לב!</h4>
+            </div>
+            <div id="deleteBody"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('.deleteBtn').on('click', function (event) {
+    var url = $('#deleteModal').data('url');
+    $.ajax({
+        url: url,
+        type: 'get',
+        data: {
+            id: event.target.dataset.user
+        },
+        success: function (data) {
+            $('#deleteBody').html(data);
+
+            $('#deleteModal').modal('show');
+        }
+    });
+})
+</script>
