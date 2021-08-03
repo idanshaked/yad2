@@ -1,11 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using yad2.Data;
-using Microsoft.EntityFrameworkCore;
+using yad2.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace yad2.Controllers
 {
@@ -18,9 +22,30 @@ namespace yad2.Controllers
             _context = context;
         }
 
+
+        [Authorize]
         public IActionResult Index()
         {
-            return View();
+            string username = ((ClaimsIdentity)User.Identity).Name;
+            if (!String.IsNullOrEmpty(username))
+            {
+                var users = from u in _context.User
+                            where u.Username == username && u.isAdmin
+                            select u;
+                if (users.Count() == 0)
+                {
+                    return RedirectToAction(nameof(UsersController.AccessDenied), "Users");
+                }
+                else
+                {
+                    return View();
+                }
+            }
+            else
+            {
+                return RedirectToAction(nameof(UsersController.AccessDenied), "Users");
+            }
+
         }
 
         [HttpGet]
