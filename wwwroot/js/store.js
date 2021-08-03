@@ -52,16 +52,14 @@ const handleEdit = (event) => {
     var row = event.target.closest("tr");
     $("td", row).each(function () {
         if ($(this).find("input").length > 0) {
-            if (!$(this).hasClass("storeName")) {
-                $(this).find("input").show();
-                $(this).find("span").hide();
-            }
+            $(this).find("input").show();
+            $(this).find("span").hide();
         }
     });
     $(row).find(".Update").show();
     $(row).find(".cancel").show();
     $(row).find(".deleteBtn").hide();
-    $(event.target).hide();
+    $(row).find(".Edit").hide();
 };
 
 const handleCancel = (event) => {
@@ -78,5 +76,20 @@ const handleCancel = (event) => {
     $(row).find(".Edit").show();
     $(row).find(".deleteBtn").show();
     $(row).find(".Update").hide();
-    $(event.target).hide();
+    $(row).find(".cancel").hide();
 };
+
+const validateStore = (store) => {
+    const { storeName, address, Description } = store;
+    const invalidFields = []
+    if (!storeName) {
+        invalidFields.push("storeName")
+    }
+    if (!address) {
+        invalidFields.push("address")
+    }
+    if (!Description) {
+        invalidFields.push("Description")
+    }
+    return invalidFields;
+}

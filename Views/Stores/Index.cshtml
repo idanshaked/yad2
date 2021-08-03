@@ -18,6 +18,10 @@
                 event.preventDefault();
                 var row = $(this).closest("tr");
                 var modifiedStore = {};
+                modifiedStore.id = row[0].dataset.storeid;
+                modifiedStore.storeId = row[0].dataset.storeid;
+                modifiedStore.lng = row[0].dataset.lng;
+                modifiedStore.lat = row[0].dataset.lat;
                 modifiedStore.storeName = row.find(".storeName").find("input").val();
                 modifiedStore.address = row.find(".address").find("input").val();
                 modifiedStore.Description = row.find(".Description").find("input").val();
@@ -27,14 +31,15 @@
                         if ($(this).find("input").length > 0) {
                             var span = $(this).find("span");
                             var input = $(this).find("input");
+                            span.html(input.val())
                             span.show();
                             input.hide();
                         }
                     });
-                    row.find(".Edit").show();
-                    row.find(".deleteBtn").show();
-                    row.find(".Update").hide();
-                    row.find(".cancel").hide();
+                    $(row).find(".Edit").show();
+                    $(row).find(".deleteBtn").show();
+                    $(row).find(".Update").hide();
+                    $(row).find(".cancel").hide();
                     $(this).hide();
 
                     var token = '@Html.AntiForgeryToken()';
@@ -43,7 +48,7 @@
 
                     $.ajax({
                         type: "POST",
-                        url: "/Store/Edit/5",
+                        url: "/Stores/Edit/5",
                         dataType: "JSON",
                         data: modifiedStore
                     })
@@ -56,23 +61,6 @@
                 return false;
             });
     })
-
-    const validateStore = (user) => {
-        const { storeName, address, Description } = store;
-        const invalidFields = []
-        if (!storeName) {
-            invalidFields.push("storeName")
-        }
-        if (!address) {
-            invalidFields.push("address")
-        }
-        if (!Description) {
-            invalidFields.push("Description")
-        }
-        return invalidFields;
-    }
-
-
     const getSearchedStores = function (fields) {
         return new Promise(resolve => {
             $.ajax({
@@ -81,8 +69,8 @@
                 data: fields,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-                success: function (users) {
-                    resolve(users)
+                success: function (stores) {
+                    resolve(stores)
                 }
             });
         })
@@ -95,7 +83,6 @@
         getSearchedStores(searchFields).then(function (stores) {
             $("#storesTableBody").html('');
             stores.forEach(store => {
-                console.log(store);
                 const storeData =
                     " <tr>" +
                     "<td class='storeName'>" +
@@ -118,12 +105,13 @@
                     "</td>" +
                     "<td>" +
                     "<div class='container'>" +
-                        "<a class='Edit'><i class='fas fa-pencil-alt'></i></a>"+
-                        "<a class='fas fa-user-times deleteBtn' data-toggle='modal' data-store='" + store.storeName +"'> </a>" +
-                        "<a class='cancel fas fa-undo' style='display:none' data-store='" + store.storeName +"'> </a>" +
-                        "<button form='editForm_" + store.storeName + "' type='submit' class='Update fas fa-save' style='display:none' data-store='" + store.storeName + "'></button>" +
-                        "</div> </td> <td> <form id='editForm_" + store.storeName +"'/> </td> </tr>"
+                    "<a class='Edit link-button' onclick='handleEdit(event)'><i class='fas fa-pencil-alt' ></i></a>" +
+                    "<a class='fas fa-user-times deleteBtn link-button' onclick='handleDelete()' data-toggle='modal' data-store='" + store.storeId + "'> </a>" +
+                    "<a class='cancel fas fa-undo link-button' onclick='handleCancel(event)' style='display:none' data-store='" + store.storeId +"'> </a>" +
+                    "<button form='editForm_" + store.storeName + "' type='submit' class='Update fas fa-save' style='display:none' data-store='" + store.storeId + "'></button>" +
+                    "</div> </td> <td> <form id='editForm_" + store.storeName + "'/> </td> </tr>"
                 $("#storesTableBody").append(storeData);
+
             })
         })
     }
@@ -229,7 +217,7 @@
     <tbody id="storesTableBody">
         @foreach (var store in Model)
         {
-            <tr>
+            <tr data-storeId="@store.storeId" data-lat="@store.lat" data-lng="@store.lng">
                 <td class="storeName">
                     <span data-val="@store.storeName">
                         @Html.DisplayFor(modelItem => store.storeName)
@@ -254,9 +242,9 @@
                         <a class="Edit link-button" onclick="handleEdit(event)"><i class="fas fa-pencil-alt"></i></a>
                         <a class="fas fa-user-times deleteBtn link-button" onclick="handleDelete()" data-toggle="modal" data-store="@store.storeId">
                         </a>
-                        <a class="cancel fas fa-undo link-button" onclick="handleCancel(event)" style="display:none" data-store="@store.storeName">
+                        <a class="cancel fas fa-undo link-button" onclick="handleCancel(event)" style="display:none" data-store="@store.storeId">
                         </a>
-                        <button form="editForm_@store.storeName" type="submit" class="Update fas fa-save" style="display:none" data-store="@store.storeName">
+                        <button form="editForm_@store.storeName" type="submit" class="Update fas fa-save" style="display:none" data-store="@store.storeId">
                         </button>
                     </div>
                 </td>
