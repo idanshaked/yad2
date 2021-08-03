@@ -14,7 +14,7 @@
         <div class="card border-dark mb-3">
             <div class="card-body">
                     <a asp-action="Edit" asp-route-id="@item.tagId">
-                        <i class="fas fa-pen"></i>
+                        <i class="fas fa-pen edit-icon"></i>
                     </a> 
                 <p class="card-text"> @Html.DisplayFor(modelItem => item.tageName)</p>
             </div>
@@ -22,49 +22,8 @@
         }
      </div>
 </div>
-
-
-            @*<tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.tageName)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.tagId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.tagId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.tagId">Delete</a>
-                </td>
-            </tr>
-        }
-    </div>
-
-
-
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>*@
-    @*<table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.tageName)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.tageName)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.tagId">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.tagId">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.tagId">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>*@
-@*</div>*@
+<p class="create-btn">
+    <a asp-action="Create">
+        <i class="colored-btn fas fa-plus-circle"></i>
+    </a>
+</p>
