@@ -205,6 +205,7 @@ namespace yad2.Controllers
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var user = await _context.User.FindAsync(id);
+            _context.Posts.RemoveRange(_context.Posts.Where(p => p.Publisher.Username == id));
             _context.User.Remove(user);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
