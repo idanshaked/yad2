@@ -12,55 +12,55 @@
 
 <script>
 
-    $(document).ready(function () {
 
-            $(".table").on("submit", 'form', function (event) {
-                event.preventDefault();
-                var row = $(this).closest("tr");
-                var modifiedStore = {};
-                modifiedStore.id = row[0].dataset.storeid;
-                modifiedStore.storeId = row[0].dataset.storeid;
-                modifiedStore.lng = row[0].dataset.lng;
-                modifiedStore.lat = row[0].dataset.lat;
-                modifiedStore.storeName = row.find(".storeName").find("input").val();
-                modifiedStore.address = row.find(".address").find("input").val();
-                modifiedStore.Description = row.find(".Description").find("input").val();
-                const validationMessages = validateStore(modifiedStore);
-                if (validationMessages.length == 0) {
-                    $("td", row).each(function () {
-                        if ($(this).find("input").length > 0) {
-                            var span = $(this).find("span");
-                            var input = $(this).find("input");
-                            span.html(input.val())
-                            span.show();
-                            input.hide();
-                        }
-                    });
-                    $(row).find(".Edit").show();
-                    $(row).find(".deleteBtn").show();
-                    $(row).find(".Update").hide();
-                    $(row).find(".cancel").hide();
-                    $(this).hide();
+    const handleUpdate = e => {
+            event.preventDefault();
+            var row = e.target.closest("tr");
+            var modifiedStore = {};
+            modifiedStore.id = $(row)[0].dataset.storeid;
+            modifiedStore.storeId = $(row)[0].dataset.storeid;
+            modifiedStore.lng = $(row)[0].dataset.lng;
+            modifiedStore.lat = $(row)[0].dataset.lat;
+            modifiedStore.storeName = $(row).find(".storeName").find("input").val();
+            modifiedStore.address = $(row).find(".address").find("input").val();
+            modifiedStore.Description = $(row).find(".Description").find("input").val();
+            const validationMessages = validateStore(modifiedStore);
+            if (validationMessages.length == 0) {
+                $("td", $(row)).each(function () {
+                    if ($(this).find("input").length > 0) {
+                        var span = $(this).find("span");
+                        var input = $(this).find("input");
+                        span.html(input.val())
+                        span.show();
+                        input.hide();
+                    }
+                });
+                $(row).find(".Edit").show();
+                $(row).find(".deleteBtn").show();
+                $(row).find(".Update").hide();
+                $(row).find(".cancel").hide();
+                $(this).hide();
 
-                    var token = '@Html.AntiForgeryToken()';
-                    token = $(token).val();
-                    modifiedStore.__requestverificationtoken = token;
+                var token = '@Html.AntiForgeryToken()';
+                token = $(token).val();
+                modifiedStore.__requestverificationtoken = token;
 
-                    $.ajax({
-                        type: "POST",
-                        url: "/Stores/Edit/5",
-                        dataType: "JSON",
-                        data: modifiedStore
-                    })
-                } else {
-                    validationMessages.forEach(field => {
-                        let inputField = row.find(`.` + field + ' input');
-                        inputField.addClass('has-error')
-                    })
-                }
-                return false;
-            });
-    })
+                $.ajax({
+                    type: "POST",
+                    url: "/Stores/Edit/5",
+                    dataType: "JSON",
+                    data: modifiedStore
+                })
+            } else {
+                validationMessages.forEach(field => {
+                    let inputField = $(row).find(`.` + field + ' input');
+                    inputField.addClass('has-error')
+                })
+            }
+            return false;
+        
+    }
+
     const getSearchedStores = function (fields) {
         return new Promise(resolve => {
             $.ajax({
@@ -109,7 +109,7 @@
                     "<a class='Edit link-button' onclick='handleEdit(event)'><i class='fas fa-pencil-alt' ></i></a>" +
                     "<a class='fas fa-user-times deleteBtn link-button' onclick='handleDelete()' data-toggle='modal' data-store='" + store.storeId + "'> </a>" +
                     "<a class='cancel fas fa-undo link-button' onclick='handleCancel(event)' style='display:none' data-store='" + store.storeId +"'> </a>" +
-                    "<button form='editForm_" + store.storeName + "' type='submit' class='Update fas fa-save' style='display:none' data-store='" + store.storeId + "'></button>" +
+                    "<button onclick='handleUpdate(event)' form='editForm_" + store.storeName + "' type='submit' class='Update fas fa-save' style='display:none' data-store='" + store.storeId + "'></button>" +
                     "</div> </td> <td> <form id='editForm_" + store.storeName + "'/> </td>} </tr>"
                 $("#storesTableBody").append(storeData);
 
@@ -246,7 +246,7 @@
                         </a>
                         <a class="cancel fas fa-undo link-button" onclick="handleCancel(event)" style="display:none" data-store="@store.storeId">
                         </a>
-                        <button form="editForm_@store.storeName" type="submit" class="Update fas fa-save" style="display:none" data-store="@store.storeId">
+                        <button form="editForm_@store.storeName" onclick="handleUpdate(event)" type="submit" class="Update fas fa-save" style="display:none" data-store="@store.storeId">
                         </button>
                     </div>
                 </td>

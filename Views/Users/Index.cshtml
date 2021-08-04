@@ -120,7 +120,7 @@
                         </a>
                         <a class="cancel fas fa-undo link-button " style="display:none" data-user="@item.Username">
                         </a>
-                            <button form="editForm_@item.Username" type="submit" class="Update fas fa-save" style="display:none" data-user="@item.Username">
+                            <button onClick ="handleUpdate(event)" form="editForm_@item.Username" type="submit" class="Update fas fa-save" style="display:none" data-user="@item.Username">
                             </button>
                     </div>
                 </td>
@@ -163,20 +163,17 @@
 <script src="~/js/users.js"></script>
 <script src="~/js/Search.js"></script>
 <script>
-
-    $(document).ready(function () {
-            $(".table").on("submit", 'form', function (event) {
-                event.preventDefault();
-                var row = $(this).closest("tr");
-                var modifiedUser = {};
-                modifiedUser.Username = row.find(".username").find("input").val();
-                modifiedUser.Password = row.find(".password").find("input").val();
-                modifiedUser.Email = row.find(".mail").find("input").val();
-                modifiedUser.Phone = row.find(".phone").find("input").val();
+    const handleUpdate = e => {
+        var row = e.target.closest("tr");
+        var modifiedUser = {};
+        modifiedUser.Username = $(row).find(".username").find("input").val();
+       modifiedUser.Password = $(row).find(".password").find("input").val();
+                modifiedUser.Email = $(row).find(".mail").find("input").val();
+                modifiedUser.Phone = $(row).find(".phone").find("input").val();
                 modifiedUser.id = modifiedUser.Username;
                 const validationMessages = validateUser(modifiedUser);
                 if (validationMessages.length == 0) {
-                    $("td", row).each(function () {
+                    $("td", $(row)).each(function () {
                         if ($(this).find("input").length > 0) {
                             var span = $(this).find("span");
                             var input = $(this).find("input");
@@ -198,13 +195,13 @@
                             input.hide();
                         }
                     });
-                    row.find(".Edit").show();
-                    row.find(".deleteBtn").show();
-                    row.find(".Update").hide();
-                    row.find(".cancel").hide();
+                    $(row).find(".Edit").show();
+                    $(row).find(".deleteBtn").show();
+                    $(row).find(".Update").hide();
+                    $(row).find(".cancel").hide();
                     $(this).hide();
 
-                    modifiedUser.isAdmin = row.find(".isAdmin").find("span").find("#realValue")[0].checked
+                    modifiedUser.isAdmin = $(row).find(".isAdmin").find("span").find("#realValue")[0].checked
                     var token = '@Html.AntiForgeryToken()';
                     token = $(token).val();
                     modifiedUser.__requestverificationtoken = token;
@@ -217,13 +214,13 @@
                     })
                 } else {
                     validationMessages.forEach(field => {
-                        let inputField = row.find(`.` + field + ' input');
+                        let inputField = $(row).find(`.` + field + ' input');
                         inputField.addClass('has-error')
                     })
                 }
                 return false;
-            });
-    })
+            
+    }
 
     const searchUsers = () => {
         const searchByAdmin = $("#isSearchByAdmin").prop('checked');
@@ -240,7 +237,7 @@
                     $("#usersTableBody").html('');
                     users.forEach(user => {
                         const mailHref = "mailto:" + user.email;
-                       
+
                         let isAdminData;
                         if (user.isAdmin) {
                             isAdminData = "<td class='isAdmin'>" +
@@ -281,10 +278,10 @@
                             "</td>" + isAdminData +
                             "<td>" +
                             "<div class='container'>" +
-                                "<a class='Edit'><i class='fas fa-pencil-alt'></i></a>"+
-                                "<a class='fas fa-user-times deleteBtn' data-toggle='modal' data-user='" + user.username +"'> </a>" +
-                                "<a class='cancel fas fa-undo' style='display:none' data-user='" + user.username +"'> </a>" +
-                                "<button form='editForm_" + user.username +"' type='submit' class='Update fas fa-save' style='display:none' data-user='" + user.Username + "'></button>" +
+                                "<a class='Edit link-button'><i class='fas fa-pencil-alt'></i></a>"+
+                                "<a class='fas fa-user-times deleteBtn link-button' data-toggle='modal' data-user='" + user.username +"'> </a>" +
+                                "<a class='cancel fas fa-undo link-button' style='display:none' data-user='" + user.username +"'> </a>" +
+                                "<button onclick='handleUpdate(event)' form='editForm_" + user.username +"' type='submit' class='Update fas fa-save' style='display:none' data-user='" + user.Username + "'></button>" +
                             "</div> </td> <td> <form id='editForm_" + user.username +"'/> </td> </tr>"
                         $("#usersTableBody").append(userData);
                     })
