@@ -11,6 +11,9 @@
             padding-right: 20px;
             color: #717171;
             margin-bottom: 3%;
+            border: 1px solid #7a7a97;
+            padding: 2px;
+            border-radius: 10px;
         }
 
             .header > img {
@@ -56,6 +59,9 @@
             align-items: center;
             display: flex;
         }
+        .tag-item:hover{
+            background-color:antiquewhite;
+        }
     </style>
 </head>
 
@@ -65,7 +71,7 @@
         <h3>קניות בפשטות, קלילות ומהירות</h3>
         <a type="button" class="btn btn-primary header-button" asp-area="" asp-controller="Posts" asp-action="Index">לצפייה בפוסטים</a>
     </div>
-    <h3>תגיות מובילות</h3>
+    <h3 style="text-shadow: 1px 1px #d7c8c8">תגיות מובילות</h3>
     <hr>
     <div class="recommended-tags">
         @foreach (var tag in ViewBag.tags)
